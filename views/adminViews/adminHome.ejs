@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/admins/adminhome.css">
+</head>
+
+<body>
+  <header>
+    <div class="admin">Admin</div>
+    <div class="logo">R&R <br> Wares</div>
+    <div class="useless"></div>
+
+  </header>
+  <div class="options overflow-hidden d-flex">
+    <div>
+      <ul>
+        <li class="head">Dashboard</li>
+        <li><a href="/adminProductManage">Product Management</a></li>
+        <li><a href="/adminCategoryManage">Category Management</a></li>
+        <li><a href="/adminUserManage">User Management</a></li>
+        <li><a href="/adminOrderManage">Order Management</a></li>
+        <li><a href="/adminCouponManage">Coupon Management</a></li>
+      </ul>
+      <div class="logout">
+        <a href="/adminLogout">
+          <button type="submit" class="button">Logout</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="all-box text-center">
+            <div class="box text-primary"><i class="fa-solid fa-user-group text-primary bg-light"></i>
+              <%= users.length %><br>Users
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="all-box text-center">
+            <div class="box"><i class="fa-solid fa-box-archive bg-light"></i>
+              <%= orders.length %> <br>Orders
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="all-box text-center">
+            <div class="box text-success"><i class="fa-solid fa-money-bill-1 text-success bg-light"></i>₹<%=
+                dashDetails?.profit?dashDetails.profit:0 %><br>Profit</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top sellings -->
+      <div class="container row mt-4">
+        <div class="col border border-warning rounded-3 mx-1">
+          <h4 class="text-center py-2">Top selling Products</h4>
+          <hr> 
+          <% for(let i=0;i< topProducts.length;i++){ %>
+              <p>
+                <%= topProducts[i].productName %> <br>
+                  <%= topProducts[i].totalUnitsSold %> units
+              </p>
+           
+            <% } %> 
+        </div>
+        <div class="col col border border-warning rounded-3">
+          <h4 class="text-center py-2">Top selling Brands</h4>
+          <hr>
+          <% for(let i=0;i< topBrands.length;i++){ %>
+            <p>
+              <%= topBrands[i].brand %> - <%= topBrands[i].totalUnitsSold %> units
+            </p>
+            <% } %>
+        </div>
+        <div class="col col border border-warning rounded-3 mx-1">
+          <h4 class="text-center py-2">Top selling Categories</h4>
+          <hr>
+          <% for(let i=0;i< topCategories.length;i++){ %>
+            <p>
+              <%= topCategories[i].category %> - <%= topCategories[i].totalUnitsSold %> units
+            </p>
+            <% } %>
+        </div>
+      </div>
+      <div class="row align-center">
+        <select class="border border-3 border-warning w-25 rounded-3 mt-5 mx-5 py-2" id="filterSales">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mt-5">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+  <script src="/js/adimnDash.js"></script>
+</body>
+
+</html>

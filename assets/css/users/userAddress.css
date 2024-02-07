@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&family=Rokkitt&family=Staatliches&display=swap');
+/* Color of the links BEFORE scroll */
+body {
+    background-color: #ffffff;
+    overflow-x: hidden;
+
+}
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar BEFORE scroll */
+.navbar-scroll {
+    background-color: #ffffff;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scrolled {
+    background-color: #fff;
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar.navbar-scroll.navbar-scrolled {
+    padding-top: auto;
+    padding-bottom: auto;
+}
+
+.navbar-brand {
+    font-size: 48px;
+    color: #000;
+    text-align: center;
+    font-family: Felix Titling;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+} 
+
+
+
+/* search bar */
+.form {
+    position: relative;
+}
+
+.form .fa-search {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #ffffff;
+}
+
+.form-input::placeholder {
+    color: rgb(0, 0, 0);
+}
+
+.form-input {
+
+    height: 45px;
+    width: 300px;
+    text-indent: 33px;
+    border-radius: 60px;
+}
+
+/* left side buttons */
+.input-group-text {
+    border-radius: 66px;
+}
+
+.left {
+    display: flex;
+}
+
+.round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* main image */
+.img {
+    margin-top: 50px;
+    width: 100%;
+}
+
+#intro {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.forhim {
+    color: #000;
+    text-align: center;
+    font-family: 'Rokkitt';
+    font-size: 128px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2px;
+    letter-spacing: 28px;
+    margin-top: 80px;
+}
+
+.processor {
+    background-color: #fff;
+    margin-top: 5px;
+    border-bottom: 1px solid #eee
+}
+
+.brand {
+    background-color: #fff;
+    border-bottom: 1px solid #eee
+}
+
+.type {
+    background-color: #fff
+}
+
+.product {
+    padding: 10px;
+    background-color: #EFEFEF;
+    border-radius: 5px;
+    position: relative
+}
+
+.about span {
+    color: #5629c0;
+    font-size: 16px
+}
+
+.about {
+    margin-top: 12px
+}
+
+
+/* media queries */
+@media (max-width: 992px) {
+    .navbar-brand {
+        font-size: 36px;
+    }
+    .forhim{
+        font-size: 100px;
+        margin-top: 60px;
+        letter-spacing: 20px;
+    }
+    .img{
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 24px;
+        margin-top: 40px;
+        letter-spacing: 12px;
+    }
+    .forhim{
+        font-size: 50px;
+    }
+    .img{
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 18px;
+    }
+    .forhim{
+        font-size: 15px;    
+        margin-top: 20px;
+        letter-spacing: 4px;
+    }
+    .img{
+        margin-top: 20px;
+    }
+}
+
+
+/* My Account */
+.payments-item img.mr-3 {
+    width: 47px;
+}
+.order-list .btn {
+    border-radius: 2px;
+    min-width: 121px;
+    font-size: 13px;
+    padding: 7px 0 7px 0;
+}
+.osahan-account-page-left .nav-link {
+    padding: 18px 20px;
+    border: none;
+    font-weight: 600;
+    color: #535665;
+}
+.osahan-account-page-left .nav-link i {
+    width: 28px;
+    height: 28px;
+    background: #535665;
+    display: inline-block;
+    text-align: center;
+    line-height: 29px;
+    font-size: 15px;
+    border-radius: 50px;
+    margin: 0 7px 0 0px;
+    color: #fff;
+}
+.osahan-account-page-left .nav-link.active {
+    background: #f3f7f8;
+    color: #282c3f !important;
+}
+.osahan-account-page-left .nav-link.active i {
+    background: #282c3f !important;
+}
+.osahan-user-media img {
+    width: 90px;
+}
+.card offer-card h5.card-title {
+    border: 2px dotted #000;
+}
+.card.offer-card h5 {
+    border: 1px dotted #daceb7;
+    display: inline-table;
+    color: #17a2b8;
+    margin: 0 0 19px 0;
+    font-size: 15px;
+    padding: 6px 10px 6px 6px;
+    border-radius: 2px;
+    background: #fffae6;
+    position: relative;
+}
+.card.offer-card h5 img {
+    height: 22px;
+    object-fit: cover;
+    width: 22px;
+    margin: 0 8px 0 0;
+    border-radius: 2px;
+}
+.card.offer-card h5:after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #daceb7;
+    content: "";
+    left: 30px;
+    position: absolute;
+    bottom: 0;
+}
+.card.offer-card h5:before {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #daceb7;
+    content: "";
+    left: 30px;
+    position: absolute;
+    top: 0;
+}
+.payments-item .media {
+    align-items: center;
+}
+.payments-item .media img {
+    margin: 0 40px 0 11px !important;
+}
+.reviews-members .media .mr-3 {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+}
+.order-list img.mr-4 {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075)!important;
+    border-radius: 2px;
+}
+.osahan-cart-item p.text-gray.float-right {
+    margin: 3px 0 0 0;
+    font-size: 12px;
+}
+.osahan-cart-item .food-item {
+    vertical-align: bottom;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    color: #000000;
+}
+
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+.rounded-pill {
+    border-radius: 50rem!important;
+}
+a:hover{
+    text-decoration:none;
+}
+
+.default{
+    color: rgb(0, 0, 0);
+    margin-top: 4px;
+}
+ .default:hover{
+    color: #ffffff;
+    background-color: #2cc029;
+ }
+ a{
+    text-decoration: none;
+ }
+
+ /* Cart icon number */
+.contain {
+    position: relative;
+}
+
+.badgeCustom {
+    background-color: yellow;
+    color: black;
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px; /* Adjust the top value for positioning */
+    right: -15px; /* Adjust the right value for positioning */
+    width: 20px; /* Set a fixed width for a perfect circle */
+    height: 20px; /* Set a fixed height for a perfect circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.count {
+    margin: 0;
+    font-size: 12px;
+}

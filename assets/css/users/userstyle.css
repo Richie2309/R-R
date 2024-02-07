@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&display=swap');
+/* @import url('https://db.onlinewebfonts.com/c/87de6bcedaa28b9a81b24587815faf41?family=Felix+Titling'); */
+
+*{
+    scroll-behavior: smooth;
+    font-family: 'Bai Jamjuree', 'sans-serif';
+}
+body{
+    overflow-x: hidden;
+
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: Felix Titling;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: rgb(0, 0, 0);
+}
+a {
+    text-decoration: none;
+}
+
+.err{
+	margin: 0;
+	margin: 0.5rem 0;
+	color: red;
+	font-size: 0.80rem;
+	font-weight: 500;
+	width: max-content;
+}
+.errDiv{
+	border: 1px solid red;
+}
+.resendbtn {
+    /* display: none; */
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 7px;
+    width: 80px;
+    height: 32px;
+    background: #000;
+    border: transparent;
+    font-family: 'Bai Jamjuree', 'sans-serif'
+  }

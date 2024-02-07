@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admins/adminAddProduct.css">
+</head>
+
+<body>
+    <header>
+        <div class="admin">Admin</div>
+        <div class="logo">R&R <br> Wares</div>
+        <div class="useless"></div>
+
+    </header>
+    <div class="d-flex">
+        <div class="navigation-container">
+            <ul>
+                <li><a href="/adminHome">Dashboard</a></li>
+                <li><a href="/adminProductManage" class="head">Product Management</a></li>
+                <li><a href="/adminCategoryManage">Category Management</a></li>
+                <li><a href="/adminUserManage">User Management</a></li>
+                <li><a href="/adminOrderManage">Order Management</a></li>
+                <li><a href="/adminCouponManage">Coupon Management</a></li>
+            </ul>
+            <div class="logout">
+                <a href="/adminLogout">
+                    <button type="submit" class="button">Logout</button>
+                </a>
+            </div>
+        </div>
+
+        <form action="/adminAddProduct" enctype="multipart/form-data" method="post">
+            <div class="form row p-1">
+                <h1>Add Product</h1><br>
+
+                <div class="col-md-6">
+                    <label for="validateProductName" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" name="pName" id="validateProductName">
+                    <p class="text-danger">
+                        <%=product?.pName %>
+                    </p>
+                    <small class="text-danger"></small>
+                </div>
+                <div class="col-md-6">
+                    <label for="validatebrand" class="form-label">Brand</label>
+                    <input type="text" class="form-control" name="brand" id="validatebrand">
+                    <p class="text-danger">
+                        <%=product?.brand %>
+                    </p>
+                    <small class="text-danger"></small>
+                </div>
+
+                <div class="col-6">
+                    <label for="validateCaseShape" class="form-label">Product Details</label>
+                    <input type="text" class="form-control larger" name="pDescription" id="validateCaseShape">
+                    <p class="text-danger">
+                        <%=product?.pDescription %>
+                    </p>
+                    <small class="text-danger"></small>
+                </div>
+                <div class="col-md-2">
+                    <label for="validatePrice" class="form-label">Price</label>
+                    <input type="number" class="form-control" name="price" id="validatePrice">
+                    <p class="text-danger">
+                        <%=product?.price %>
+                    </p>
+                    <small class="text-danger"></small>
+                </div>
+                <div class="col-md-2">
+                    <label for="validateOffer" class="form-label">Units</label>
+                    <input type="number" class="form-control" name="units" id="validateOffer">
+                    <p class="text-danger">
+                        <%=product?.units %>
+                    </p>
+                    <small class="text-danger"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="validateCategory" class="form-label">Categories</label>
+                    <select id="validateCategory" class="form-select form-control" name="category">
+                        <% for(let i=0;i<category.length;i++){ %>
+                            <option value="<%= category[i].name %>">
+                                <%= category[i].name %>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                <div class="col-md-12 m-3  d-flex  justify-content-center">
+                    <div class="col-md-6">
+                        <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
+                        <p class="text-danger">
+                            <%=product?.files %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Image Preview -->
+                <div class="d-flex justify-content-center mt-3">
+                    <div id="image-preview" class="col-md-6" style="max-width: 200px; max-height: 100px;">
+                    </div>
+                </div>
+                <!--  -->
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="btn btn-primary col-6">Add product</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+      function previewImages() {
+            var previewContainer = document.getElementById('image-preview');
+            var filesInput = document.getElementById('formFileMultiple');
+            var files = filesInput.files;
+
+            previewContainer.innerHTML = ''; // Clear previous previews
+
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    var imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-container';
+
+                    var previewImage = document.createElement('img');
+                    previewImage.src = event.target.result;
+                    previewImage.className = 'preview-image';
+
+                    // var closeIcon = document.createElement('span');
+                    // closeIcon.innerHTML = '&times;';
+                    // closeIcon.className = 'close-icon';
+                    // closeIcon.onclick = function () {
+                    //     imageContainer.remove();
+                    // };
+
+                    imageContainer.appendChild(previewImage);
+                    // imageContainer.appendChild(closeIcon);
+
+                    previewContainer.appendChild(imageContainer);
+                }
+
+                reader.readAsDataURL(files[i]); 
+            }
+        }
+
+        document.getElementById('formFileMultiple').addEventListener('change', previewImages);
+    </script>
+</body>
+
+</html>
+

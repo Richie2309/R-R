@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&family=Rokkitt&family=Staatliches&display=swap');
+/* Color of the links BEFORE scroll */
+body {
+    background-color: #ffffff;
+    overflow-x: hidden;
+
+}
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar BEFORE scroll */
+.navbar-scroll {
+    background-color: #ffffff;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scrolled {
+    background-color: #fff;
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar.navbar-scroll.navbar-scrolled {
+    padding-top: auto;
+    padding-bottom: auto;
+}
+
+.navbar-brand {
+    font-size: 48px;
+    color: #000;
+    text-align: center;
+    font-family: Felix Titling;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+} 
+
+/* her and him on nav */
+#him {
+    padding-right: 50px;
+
+}
+
+#her {
+    padding-right: 100px;
+}
+
+.him {
+    font-family: Staatliches;
+    font-size: 40px;
+    padding-top: 15px;
+
+}
+
+.her {
+    font-family: Staatliches;
+    font-size: 50px;
+    
+}
+
+/* search bar */
+.form {
+    position: relative;
+}
+
+.form .fa-search {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #ffffff;
+}
+
+.form-input::placeholder {
+    color: white;
+}
+
+.form-input {
+
+    height: 45px;
+    width: 300px;
+    text-indent: 33px;
+    border-radius: 60px;
+}
+
+/* left side buttons */
+.input-group-text {
+    border-radius: 66px;
+}
+
+.left {
+    display: flex;
+}
+
+.round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* main image */
+.img {
+    margin-top: 50px;
+    width: 100%;
+}
+
+#intro {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.forhim {
+    color: #000;
+    text-align: center;
+    font-family: 'Rokkitt';
+    font-size: 128px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 2px;
+    letter-spacing: 28px;
+    margin-top: 80px;
+}
+
+.processor {
+    background-color: #fff;
+    margin-top: 5px;
+    border-bottom: 1px solid #eee
+}
+
+.brand {
+    background-color: #fff;
+    border-bottom: 1px solid #eee
+}
+
+.type {
+    background-color: #fff
+}
+
+.product {
+    padding: 10px;
+    background-color: #EFEFEF;
+    border-radius: 5px;
+    position: relative
+}
+
+.about span {
+    color: #5629c0;
+    font-size: 16px
+}
+
+.about {
+    margin-top: 12px
+}
+
+
+/* media queries */
+@media (max-width: 992px) {
+    .navbar-brand {
+        font-size: 36px;
+    }
+    .forhim{
+        font-size: 100px;
+        margin-top: 60px;
+        letter-spacing: 20px;
+    }
+    .img{
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 24px;
+        margin-top: 40px;
+        letter-spacing: 12px;
+    }
+    .forhim{
+        font-size: 50px;
+    }
+    .img{
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 18px;
+    }
+    .forhim{
+        font-size: 15px;    
+        margin-top: 20px;
+        letter-spacing: 4px;
+    }
+    .img{
+        margin-top: 20px;
+    }
+}

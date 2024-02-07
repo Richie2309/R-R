@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/users/userAddress.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-scroll shadow-0 bg-black mb-4">
+        <div class="container">
+            <a class="navbar-brand text-light" href="/">R&R <br>Wares</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars text-light"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="him">
+                        <!-- <a class="nav-link him" href="#!">FOR HIM</a> -->
+                    </li>
+                    <li class="nav-item" id="her">
+                        <!-- <a class="nav-link her" href="#!">FOR HER</a> -->
+                    </li>
+
+                    <li>
+                        <div class="form">
+                            <i class="fa fa-search text-black bg-light"></i>
+                            <input type="text" class="form-control form-input bg-light text-dark" placeholder="Search">
+                        </div>
+                    </li>
+
+                    <div class="left">
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="#!">
+                                    <i class="fa-regular fa-heart text-black"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="userSigninEmail">
+                                    <i class="fa-solid fa-user text-black"></i>
+                                </a>
+                            </div>
+
+                        </li>
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="/userCart">
+                                    <div class="position-relative contain">
+                                        <i class="fa-solid fa-cart-shopping text-black"></i>
+                                        <% if (cartProducts.length) { %>
+                                            <span class="position-absolute badgeCustom">
+                                                <p class="count text-black">
+                                                    <%= cartProducts.length %>
+                                                </p>
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="/userLogout">
+                                    <button class="border-0"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                </a>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar -->
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="osahan-account-page-left shadow-sm bg-white h-100">
+
+                    <ul class="nav nav-tabs flex-column border-0 pt-4 pl-4 pb-4" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" id="addresses-tab" data-toggle="tab" href="/userAddAddress" role="tab"
+                                aria-controls="addresses" aria-selected="false"><i
+                                    class="fa-solid fa-plus text-bg-success"></i> Add Addresses</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="osahan-account-page-right shadow-sm bg-white p-4 h-100">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade  active show" id="addresses" role="tabpanel"
+                            aria-labelledby="addresses-tab">
+                            <h4 class="font-weight-bold mt-0 mb-4">Manage Addresses</h4>
+                            <div class="row">
+                                <% if (userInfo && userInfo.address && userInfo.address.length) { %>
+                                    <% for(let i=0;i<userInfo.address.length;i++){ %>
+                                        <div class="col-md-6">
+                                            <div class="bg-white card addresses-item mb-4 border <%= userInfo.address[i]._id.toString() === userInfo.defaultAddress.toString() ? 'border-primary border-2' : 'border-secondary' %> shadow">
+                                                <div class="gold-members p-4">
+                                                    <div class="media">
+                                                        <div class="mr-3"><i class="icofont-ui-home icofont-3x"></i>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h6 class="mb-1 text-secondary">
+                                                                <%= userInfo.address[i].fullName %>
+                                                            </h6>
+                                                            <p class="text-black">
+                                                                <%= userInfo.address[i].structuredAddress %>
+                                                            </p>
+                                                            <p class="mb-0 text-black font-weight-bold">
+                                                                <a class="text-primary mr-3" data-toggle="modal"
+                                                                    data-target="#add-address-modal" href="/userEditAddress?addressId=<%= userInfo.address[i]._id %>">
+                                                                    <i class="fa-solid fa-pencil text-primary px-2"></i>
+                                                                </a>
+                                                                <a class="text-danger" data-toggle="modal"
+                                                                    data-target="#delete-address-modal" href="/deleteAddress?addressId=<%= userInfo.address[i]._id %>">
+                                                                    <i class="fa-solid fa-trash-can text-danger px-2"></i>                                                                </a>
+                                                            </p>
+                                                            <button class="btn default" onclick="setAsDefault('<%= userInfo.address[i]._id %>')">Set as Default</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% } else { %>
+                                                <p>No addresses available.</p>
+                                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-include('include/footer')-%>
+    <script>
+        async function setAsDefault(addressId) {
+            try {
+                const response = await fetch(`/changeAddress?id=${addressId}`, {
+                    method: 'GET', // or 'POST' based on your server route
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (response.ok) {
+                    // Reload the page or update the UI as needed
+                    location.reload(); // Example: reload the page
+                } else {
+                    console.error('Failed to set default address');
+                }
+            } catch (error) {
+                console.error('Error during setAsDefault:', error);
+            }
+        }
+    </script>
+    
+</body>
+
+</html>

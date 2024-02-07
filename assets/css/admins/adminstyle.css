@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    color: black;
+    font-family: 'Bai Jamjuree', 'sans-serif';
+    background-color: #EEE;
+}
+
+body{
+    overflow-x: hidden;
+
+}
+.admin {
+    color: #000;
+    font-family: Felix Titling;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    margin-top: 2vh;
+    margin-left: 2vh;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Felix Titling';
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    padding-bottom: 5vh
+}
+.useless{
+    width: 100px;
+}
+header{
+    display: flex;
+    justify-content: space-between;
+}
+.error p{
+    margin-top: 10px;
+    color: red;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+.err{
+	margin: 0;
+	margin: 0.5rem 0;
+	color: red;
+	font-size: 0.80rem;
+	font-weight: 500;
+	width: max-content;
+}
+.inputForm .errDiv{
+	border: 1px solid red;
+}
+
+@media (max-width: 576px) {
+    
+    .admin {
+        display: none;
+    }
+    .logo{
+        justify-content: center;
+        
+    }
+}

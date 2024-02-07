@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    color: black;
+    font-family: 'Bai Jamjuree', 'sans-serif';
+    background-color: #EEE;
+}
+
+body{
+    overflow-x: hidden;
+
+}
+.admin {
+    color: #000;
+    font-family: Felix Titling;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    margin-top: 2vh;
+    margin-left: 2vh;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Felix Titling';
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    color: black;
+    padding-bottom: 5vh
+}
+.useless{
+    width: 100px;
+}
+header{
+    display: flex;
+    justify-content: space-between;
+}
+.head{
+    font-family: 'STIX Two Text', serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    list-style: none;
+}
+li{
+    list-style: none;
+    padding-bottom: 27px;
+    padding-left: 18px;
+}
+li a{
+    list-style: none;
+    text-decoration: none;
+    color: #000;
+    font-family: STIX Two Text;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.logout{
+    padding-left: 69px;
+}
+.button{
+    background-color:rgba(255, 229, 163, 1);
+    border: none;
+    font-family: STIX Two Text;
+    color: black;
+    text-decoration: none;
+    width: 127px;
+    height: 51.095px;
+    border-radius: 10px;
+}
+.box{
+    display: flex;
+    background: #FFF;
+    width: 267px;
+    height: 158px;
+    border:none;
+    align-items: center;
+    padding-left: 30px;   
+    color: #000;
+    font-family: STIX Two Text;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    border-radius: 22px;
+}
+.fa-solid{
+    font-size: 40px;
+    padding-right: 20px;
+}
+.stats-box{
+    border-radius: 22px;
+    background: #FFF;
+    border-radius: 22px;
+    width: 400px;
+    height: 271px;
+    font-family: STIX Two Text;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    padding-top: 10px;
+}
+.form{
+    margin-left: 10%;
+    width:80%
+}
+
+.search{
+    height: 30px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.search::placeholder{
+    text-align: center;
+}
+
+button{
+    border: none;
+    background-color: #EEE;
+}
+
+.magnify{
+    background-color: #EEE;
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+}
+
+.img {
+    height: 110px;
+}
+
+@media (max-width: 1044px) {
+    .all-box {
+        flex-direction: column; 
+        align-items: center; 
+    }
+
+    .box {
+        margin: 10px;
+    }
+    .stats-box{
+        flex-direction: column; 
+        align-items: center;
+        margin-left: 200px;
+    }
+}
+@media (max-width: 576px) {
+    
+    .admin {
+        display: none;
+    }
+    .logo{
+        justify-content: center;
+    }
+
+
+    .options div {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .all-box, .stats-box {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .d-flex {
+        flex-direction: column;
+    }
+    .navigation-container {
+        margin-bottom: 20px; /* Adjust the space between navigation and form */
+    }
+    .logo {
+        text-align: center; /* Center the text within the logo div */
+    }
+    ul,li{
+        padding-left: 0px;
+    }
+    .navigation-container {
+        width: 100%; /* Occupy full width */
+        text-align: center; /* Center the text within the navigation container */
+    }
+.logout{
+    margin-left: 0px;
+    padding-left: 0px;
+}   
+}
+
+
+

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admins/adminProductManage.css">
+</head>
+
+<body>
+    <header>
+        <div class="admin">Admin</div>
+        <div class="logo">R&R <br> Wares</div>
+        <div class="useless"></div>
+
+    </header>
+
+    <div class="d-flex ">
+        <div class="navigation-container">
+            <ul>
+                <li><a href="/adminHome">Dashboard</a></li>
+                <li><a href="/adminProductManage">Product Management</a></li>
+                <li><a href="/adminCategoryManage">Category Management</a></li>
+                <li><a href="/adminUserManage">User Management</a></li>
+                <li><a href="/adminOrderManage">Order Management</a></li>
+                <li><a href="/adminCouponManage" class="head">Coupon Management</a></li>
+            </ul>
+            <div class="logout">
+                <a href="/adminLogout">
+                    <button type="submit" class="button">Logout</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <h1>Coupons</h1><br>
+            <div class="manageOptions">
+                <a href="/adminAddCoupon" class="bg-black p-2 rounded-1 text-light text-decoration-none">
+                    Add Coupon
+                </a>
+
+            </div><br>
+            <div class="d-flex">
+                <!-- <form action="/adminFilterProducts" method="get">
+					<input type="text" placeholder="Search by Name" name="Search" spellcheck="false" class="search"
+						required />
+					<button type="submit">
+						<i class="fa-solid fa-magnifying-glass magnify"></i>
+					</button>
+				</form> -->
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-box clearfix">
+                        <div class="table-responsive hh">
+                            <table class="table user-list">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center"><span class="bg-white">No.</span></th>
+                                        <th class="text-center"><span class="bg-white">Code</span></th>
+                                        <th class="text-center"><span class="bg-white">Discount</span></th>
+                                        <th class="text-center"><span class="bg-white">Expiry</span></th>
+                                        <th class="text-center"><span class="bg-white">Max Use</span></th>
+                                        <th class="text-center"><span class="bg-white">Min Purchase</span></th>
+                                        <th class="text-center"><span class="bg-white">Delete</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for (let i=0; i < coupons.length ; i++) { %>
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <%= i+1 %>
+                                            </td>
+                                            <td class="text-center productCol">
+                                                <div class="d-flex bg-light justify-content-center align-items-center">
+                                                    <div class="product-info bg-light">
+                                                        <p class="bg-light px-1">
+                                                            <%= coupons[i].code %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center vertical-center">
+                                                <p class="bg-light px-1">
+                                                    <%= coupons[i].discount %>
+                                                </p>
+                                            </td>
+                                            <td class="text-center vertical-center">
+                                                <p class="bg-light px-1">
+                                                    <%= coupons[i].expiry.toLocaleDateString() %>
+                                                </p>
+                                            </td>
+                                            <td class="text-center vertical-center">
+                                                <span class="bg-light">
+                                                    <%= coupons[i].maxUse %>
+                                                </span>
+                                            </td>
+                                            <td class="text-center vertical-center">
+                                                <span class="bg-light">₹<%= coupons[i].minPrice %></span>
+                                            </td>
+                                            <td class="text-center vertical-center">
+
+                                                <button type="button" class="delete-coupon-btn"
+                                                    data-coupon-id="<%= coupons[i]._id %>">
+                                                    <i class="fa-solid fa-trash fs-5 bg-light"></i>
+                                                </button>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <% if(coupons.length==0){ %>
+                                                <h3 class="text-center">No Coupons</h3>
+                                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.0/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle click on delete button
+            document.querySelectorAll('.delete-coupon-btn').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var couponId = this.getAttribute('data-coupon-id');
+                    // Use SweetAlert2 for confirmation
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You want to delete this?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/adminDeleteCoupon?couponId=${couponId}`, {
+                                method: 'DELETE'
+                            }).then(() => {
+                                // Reload the page after delete operation
+                                location.reload();
+                            }).catch(error => {
+                                console.error('Error:', error);
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

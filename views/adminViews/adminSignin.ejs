@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admins/adminstyle.css">
+
+</head>
+
+<body>
+    <header>
+        <div class="admin">Admin</div>
+        <div class="logo">R&R <br> Wares</div>
+        <div class="useless"></div>
+    </header>
+
+    <div class="content">
+
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-6">
+                        <div style="text-align: center;">
+                            <h2 class="text-uppercase text-center mb-5">Admin Login</h2>
+                            <form id="loginForm" action="/adminSignin" method="POST">
+
+                                <div class="form-outline mb-4 titles">
+                                    <label class="form-label" for="form3Example3cg">Email</label>
+                                    <input type="email" name="email" class="form-control form-control-lg boxes <%= adminErr?.adminEmail?'errDiv':'' %>" />
+                                    <p class="err <%= !adminErr?.adminEmail?'d-none':'' %>"><%= adminErr?.adminEmail %></p>
+                                </div>
+
+                                <div class="form-outline mb-4 titles">
+                                    <label class="form-label" for="form3Example4cg">Password</label>
+                                    <input type="password" name="password" class="form-control form-control-lg boxes <%= adminErr?.adminPassword?'errDiv':'' %>"/>
+                                    <p class="err <%= !adminErr?.adminPassword?'d-none':'' %>"><%= adminErr?.adminPassword %></p>
+                                </div>
+                                <% if (invalid) { %>
+                                    <div class="error p-0 d-inline-block">
+                                        <p><i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i> Invalid credentials</p>
+                                    </div>
+                                <% } %>
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-dark btn-block btn-lg gradient-custom-4 text-light">Login</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+        function submitForm() {
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: document.getElementById('loginForm').elements['email'].value,
+                    password: document.getElementById('loginForm').elements['password'].value,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+
+                        window.location.href = '/adminHome';
+                    } else if (response.status === 401) {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    if (data && data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script> -->
+</body>
+
+</html>

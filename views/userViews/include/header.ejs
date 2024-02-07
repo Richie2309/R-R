@@ -1,0 +1,85 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-scroll shadow-0 bg-black">
+  <div class="container">
+      <a class="navbar-brand text-light" href="/">R&R <br>Wares</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i class="fas fa-bars text-light"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto">
+              <li class="nav-item" id="him">
+                  <!-- <a class="nav-link him" href="#!">FOR HIM</a> -->
+              </li>
+              <li class="nav-item" id="her">
+                  <!-- <a class="nav-link her" href="#!">FOR HER</a> -->
+              </li>
+
+              <li>
+                  <div class="form">
+                      <i class="fa fa-search text-black bg-light"></i>
+                      <input type="text" class="form-control form-input bg-light text-dark" placeholder="Search">
+                  </div>
+              </li>
+
+              <div class="left">
+                  <li class="nav-item p-1">
+                      <% if (isLoggedIn) { %>
+                          <div class="round bg-light">
+                              <a class="nav-link" href="#!">
+                                  <i class="fa-regular fa-heart text-black"></i>
+                              </a>
+                          </div>
+                          <% } %>
+                  </li>
+
+                  <li class="nav-item p-1">
+                      <% if (isLoggedIn) { %>
+                          <div class="round bg-light">
+                              <a class="nav-link" href="userProfile">
+                                  <i class="fa-solid fa-user text-black"></i>
+                              </a>
+                          </div>
+                          <% } else{%>
+                              <div class="round bg-light">
+                                  <a class="nav-link" href="userSigninEmail">
+                                      <i class="fa-solid fa-user text-black"></i>
+                                  </a>
+                              </div>
+                              <% } %>
+                  </li>
+
+                  <li class="nav-item p-1">
+                      <% if (isLoggedIn) { %>
+                          <div class="round bg-light">
+                            <a class="nav-link" href="/userCart">
+                                <div class="position-relative contain">
+                                    <i class="fa-solid fa-cart-shopping text-black"></i>
+                                    <% if (cartProducts.length) { %>
+                                        <span class="position-absolute badgeCustom">
+                                            <p class="count text-black">
+                                                <%= cartProducts.length %>
+                                            </p>
+                                        </span>
+                                    <% } %>
+                                </div>
+                            </a>
+                          </div>
+                          <% } %>
+                  </li>
+                  <li class="nav-item p-1">
+                      <% if (isLoggedIn) { %>
+                          <div class="round bg-light">
+                              <a class="nav-link" href="/userLogout">
+                                  <button class="border-0"><i class="fa-solid fa-right-from-bracket"></i></button>
+                              </a>
+                          </div>
+                          <% } %>
+                  </li>
+              </div>
+          </ul>
+      </div>
+  </div>
+</nav>
+<!-- Navbar -->

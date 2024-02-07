@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&family=Rokkitt&family=Staatliches&display=swap');
+/* Color of the links BEFORE scroll */
+body {
+    background-color: #000000;
+    overflow-x: hidden;
+}
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar BEFORE scroll */
+.navbar-scroll {
+    background-color: #ffffff;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+    color: #262626;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scrolled {
+    background-color: #fff;
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar.navbar-scroll.navbar-scrolled {
+    padding-top: auto;
+    padding-bottom: auto;
+}
+
+.navbar-brand {
+    font-size: 48px;
+    color: #ffffff !important;
+    text-align: center;
+    font-family: Felix Titling;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+} 
+.categories{
+    font-family: 'Bai Jamjuree';
+}
+/* her and him on nav */
+#him {
+    padding-right: 50px;
+
+}
+
+#her {
+    padding-right: 100px;
+}
+
+.him {
+    font-family: Staatliches;
+    font-size: 50px;
+
+}
+
+.her {
+    font-family: Staatliches;
+    font-size: 40px;
+    padding-top: 15px;
+}
+
+/* search bar */
+.form {
+    position: relative;
+}
+
+.form .fa-search {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #000000;
+}
+
+.form-input::placeholder {
+    color: rgb(0, 0, 0);
+}
+
+.form-input {
+
+    height: 45px;
+    width: 300px;
+    text-indent: 33px;
+    border-radius: 60px;
+}
+
+/* left side buttons */
+.input-group-text {
+    border-radius: 66px;
+}
+
+.left {
+    display: flex;
+}
+
+.round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+* {
+  box-sizing: border-box;
+}
+
+.carousel-item img {
+    max-height: 800px;
+    max-width: 800px;
+    /* width: 800;
+    height: 800; */
+}
+
+.columns-container {
+    display: flex;
+    justify-content: center;
+}
+
+.column-image {
+    max-width: 500px; /* Set your desired maximum width */
+    max-height: 500px; /* Set your desired maximum height */
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+
+.qoute img {
+    max-width:1300px ; /* Set your desired maximum width */
+    max-height: 500px; /* Set your desired maximum height */
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.row {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+  /* -ms-flex: 25%;  */
+  /* IE10 */
+  flex: 1;
+  /* max-width: 25%; */
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%;
+  height: auto;
+}
+
+/* footer */
+.footer{
+    font-family: Montserrat Subrayada;
+}
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+  .column {
+    /* -ms-flex: 50%; */
+    flex: 1;
+    max-width: 100%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    /* -ms-flex: 100%; */
+    flex: 1;
+    max-width: 100%;
+  }
+}
+
+/* cart icon number */
+.contain {
+    position: relative;
+}
+
+.badgeCustom {
+    background-color: yellow;
+    color: black;
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px; /* Adjust the top value for positioning */
+    right: -15px; /* Adjust the right value for positioning */
+    width: 20px; /* Set a fixed width for a perfect circle */
+    height: 20px; /* Set a fixed height for a perfect circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.count {
+    margin: 0;
+    font-size: 12px;
+}
+
