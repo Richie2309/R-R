@@ -291,8 +291,11 @@ exports.userCheckout = async (req, res) => {
     try {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`)
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+        const total = cartProducts.reduce((total, value) => {
+            return total += Math.round((value.pDetail[0].price * value.products.units));
+          }, 0);
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
-            res.status(200).render('userViews/userCheckout', { cartProducts: cartProducts, userInfo: user.data });
+            res.status(200).render('userViews/userCheckout', { cartProducts: cartProducts, userInfo: user.data,total });
         } else {
             // Handle the case when cartProducts is empty or doesn't have the expected structure
             res.status(200).render('userViews/userCheckout', { cartProducts: [] });

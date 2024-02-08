@@ -1,7 +1,7 @@
 const mongodb = require("mongoose");
 const product =require('../adminModel/productModel')
 
-const cartSchema = new mongodb.Schema({
+const cartSchema = new mongodb.Schema({ 
   userId: {
     type: mongodb.SchemaTypes.ObjectId,
     required: true,

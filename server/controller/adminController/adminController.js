@@ -177,6 +177,79 @@ exports.getDetailsChart = async (req, res) => {
   }
 }
 
+//Sales Report
+exports.downloadSalesReport = async (req, res, next) => {
+  try {
+    console.log("salesreport");
+    const fromDate = req.query.fromDate
+    const toDate = req.query.toDate
+
+    console.log(fromDate, toDate);
+    const agg = [
+      {
+        $unwind: "$orderItems"
+      },
+      {
+        $match: {
+          "orderDate": { $gte: new Date(fromDate), $lte: new Date(toDate) },
+        },
+      },
+      {
+        $sort: {
+          orderDate: -1,
+        },
+      },
+
+    ]
+    const results = await OrderDb.aggregate(agg);
+
+    const users = [];
+    let count = 1;
+
+    results.forEach((orders) => {
+      orders.sI = count;
+      users.push({
+        SI: orders.sI,
+        "Orders ID": orders._id,
+        "Order Date": orders.orderDate.toISOString().split("T")[0],
+        "Product Name": orders.orderItems.pName,
+        "Price of a unit": orders.orderItems.price,
+        "Qty": orders.orderItems.units,
+        "Payment Method": orders.paymentMethod,
+        "Total amount": orders.orderItems.units * orders.orderItems.price,
+      });
+      count++;
+    });
+    console.log(users);
+    // const csv = new CsvParser(results);
+    const csvFields = [
+      "SI",
+      "Orders ID",
+      "Order Date",
+      "Product Name",
+      "Price of a unit",
+      "Qty",
+      "Payment Method",
+      "Total amount",
+    ];
+    // const csvParser = new CsvParser({ csvFields });
+    const { Parser } = require('json2csv');
+    const csvParser = new Parser({ fields: csvFields });
+
+    let csvData = csvParser.parse(users);
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=salesReport.csv"
+    );
+
+    res.send(csvData);
+
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+}
 
 //User Management
 exports.getAllUser = async (req, res) => {

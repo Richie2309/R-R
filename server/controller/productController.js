@@ -45,9 +45,7 @@ exports.userProductDetail = async (req, res) => {
   }
 }
 
-
 //--From admin side--//
-
 exports.adminAddProducts = async (req, res) => {
   const { pName, brand, category, pDescription, price, units } = req.body
   const files = req.files
@@ -89,9 +87,21 @@ exports.adminAddProducts = async (req, res) => {
       console.log('all fields are required')
       return res.status(401).redirect("/adminAddProduct");
     }
+
+    for (const file of files) {
+      const inputImagePath = path.join(__dirname, '../../assets', `uploads/${file.filename}`);
+      const outputImagePath = path.join(__dirname, '../../assets', `uploads/resizedImg${file.filename}`);
+
+      await sharp(inputImagePath)
+        .resize(1117, 1400, {
+          fit: 'cover',
+          position: 'centre',
+        })
+        .toFile(outputImagePath);
+    }
     // Extract filenames from the uploaded files
-    const uploadImg = files.map((value) => { return "/uploads/" + value.filename });
-    // Create a new product using the Productdb model
+    const uploadImg = files.map((value) => { return `/uploads/resizedImg${value.filename}` });
+
     const newProduct = new Productdb({
       pName: pName,
       brand: brand,
@@ -102,37 +112,12 @@ exports.adminAddProducts = async (req, res) => {
       images: uploadImg,
     })
     const data = await newProduct.save();
-    // Apply image cropping using Sharp
-    // for (const file of files) {
-    //   const inputImagePath = path.join(__dirname, '../../../assets', `uploads/${file.filename}`);
-    //   const outputImagePath = path.join(__dirname, '../../../assets', `uploads/resizedImg${file.filename}`);
-
-    //   await sharp(inputImagePath)
-    //     .resize(2000, 888, {
-    //       fit: 'cover',
-    //       position: 'centre',
-    //     })
-    //     .toFile(outputImagePath);
-    // }
     res.redirect("/adminHome");
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal server error");
   }
 }
-
-
-
-
-// await sharp(path.join(__dirname, '../../../assets',`/uploads/${req.files.largeImg[0].filename}`))
-// .resize(2000, 888, {
-//     fit: "cover",
-//     position: "centre",
-// })
-// .toFile(path.join(__dirname, '../../../assets',`/uploads/resizedImg${req.files.largeImg[0].filename}`));
-
-
-
 
 exports.showProduct = async (req, res) => {
   try {
@@ -144,8 +129,7 @@ exports.showProduct = async (req, res) => {
       const products = await Productdb.find({ listed: false })
       res.send(products)
     }
-    // const products = await Productdb.find({ listed: (Number(req.params.value)) ? true : false })
-    // res.send(products);
+
   } catch (err) {
     console.error('Error fetching products:', err);
     res.status(500).send('Internal server error');

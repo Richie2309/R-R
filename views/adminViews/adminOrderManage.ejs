@@ -11,9 +11,11 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/admins/adminOrderManage.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
     <!-- Include SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.0/dist/sweetalert2.min.css">
+    <!-- Custom css -->
+    <link rel="stylesheet" href="/css/admins/adminOrderManage.css">
 </head>
 
 <body>
@@ -40,27 +42,16 @@
         </div>
         <div class="container-fluid">
             <h1>Orders</h1><br>
-
-            <div class="d-flex">
-                <form action="/adminFilterProducts" method="get">
-                    <input type="text" placeholder="Search by Name" name="Search" spellcheck="false" class="search"
-                        required />
-                    <button type="submit">
-                        <i class="fa-solid fa-magnifying-glass magnify"></i>
-                    </button>
-                </form>
-            </div>
             <br>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
                         <div class="table-responsive hh">
-                            <table class="table user-list">
+                            <table class="table user-list" id="table_id">
                                 <thead>
                                     <tr>
                                         <th class="text-center"><span class="bg-white">No.</span></th>
                                         <th class="text-center"><span class="bg-white">Product</span></th>
-                                        <!-- <th class="text-center"><span class="bg-white">User</span></th> -->
                                         <th class="text-center"><span class="bg-white">Quantity</span></th>
                                         <th class="text-center"><span class="bg-white">Price</span></th>
                                         <th class="text-center"><span class="bg-white">Update</span></th>
@@ -72,8 +63,8 @@
                                             <td class="align-middle text-center">
                                                 <%= i+1 %>
                                             </td>
-                                            <td class="text-center">
-                                                <div class="d-flex bg-light">
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex bg-light justify-content-center align-items-center">
                                                     <div class="product-image bg-light">
                                                         <img src="<%= orders[i].orderItems.images[0] %>"
                                                             alt="Product Image" class="img rounded-2 bg-light">
@@ -91,14 +82,8 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <!-- <td class="align-middle text-center">
-                                                <p class="mb-1 p-0">
-                                                    <%= orders[i].userInfo.fullName %>
-                                                </p>
-                                                <p class="mb-1 p-0">
-                                                    <%=orders[i].userInfo.email %>
-                                                </p>
-                                            </td> -->
+
+
                                             <td class="align-middle text-center">
                                                 <%= orders[i].orderItems.units %>
                                             </td>
@@ -110,8 +95,7 @@
                                                     action="/adminChangeOrderStatus?orderId=<%= orders[i]._id %>&productId=<%= orders[i].orderItems.productId %>"
                                                     class="changeStatus" method="post">
                                                     <div class="d-flex gap-3 bg-light">
-                                                        <input type="text" name="filter" value="<%= filter?filter:'' %>"
-                                                            hidden>
+                                                        <input type="text" name="filter" hidden>
                                                         <% if ((orders[i].orderItems.orderStatus==="Delivered" ) ||
                                                             (orders[i].orderItems.orderStatus==="Cancelled" ) ) { %>
                                                             <p
@@ -151,12 +135,25 @@
         </div>
     </div>
 
-    <!-- Include SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.0/dist/sweetalert2.all.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.0/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table_id').DataTable({
+                // info: false,//part of pagination
+                // paging: false //pagnation
+            })
+        });
+
+    </script>
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -10,10 +11,11 @@
     background-color: #EEE;
 }
 
-body{
+body {
     overflow-x: hidden;
 
 }
+
 .admin {
     color: #000;
     font-family: Felix Titling;
@@ -37,14 +39,17 @@ body{
     color: black;
     padding-bottom: 5vh
 }
-.useless{
+
+.useless {
     width: 100px;
 }
-header{
+
+header {
     display: flex;
     justify-content: space-between;
 }
-.head{
+
+.head {
     font-family: 'STIX Two Text', serif;
     font-size: 18px;
     font-style: normal;
@@ -52,12 +57,14 @@ header{
     line-height: normal;
     list-style: none;
 }
-li{
+
+li {
     list-style: none;
     padding-bottom: 27px;
     padding-left: 18px;
 }
-li a{
+
+li a {
     list-style: none;
     text-decoration: none;
     color: #000;
@@ -67,11 +74,13 @@ li a{
     font-weight: 400;
     line-height: normal;
 }
-.logout{ 
+
+.logout {
     padding-left: 69px;
 }
-.button{
-    background-color:rgba(255, 229, 163, 1);
+
+.button {
+    background-color: rgba(255, 229, 163, 1);
     border: none;
     font-family: STIX Two Text;
     color: black;
@@ -80,14 +89,15 @@ li a{
     height: 51.095px;
     border-radius: 10px;
 }
-.box{
+
+.box {
     display: flex;
     background: #FFF;
     width: 267px;
     height: 158px;
-    border:none;
+    border: none;
     align-items: center;
-    padding-left: 30px;   
+    padding-left: 30px;
     color: #000;
     font-family: STIX Two Text;
     font-size: 28px;
@@ -96,11 +106,13 @@ li a{
     line-height: normal;
     border-radius: 22px;
 }
-.fa-solid{
+
+.fa-solid {
     font-size: 40px;
     padding-right: 20px;
 }
-.stats-box{
+
+.stats-box {
     border-radius: 22px;
     background: #FFF;
     border-radius: 22px;
@@ -114,31 +126,41 @@ li a{
     text-align: center;
     padding-top: 10px;
 }
-.form{
+
+.form {
     margin-left: 10%;
-    width:80%
+    width: 80%
 }
+
+.modal {
+    background-color: rgba(0, 0, 0, 0);
+    /* Transparent background for the modal itself */
+}
+
 @media (max-width: 1044px) {
     .all-box {
-        flex-direction: column; 
-        align-items: center; 
+        flex-direction: column;
+        align-items: center;
     }
 
     .box {
         margin: 10px;
     }
-    .stats-box{
-        flex-direction: column; 
+
+    .stats-box {
+        flex-direction: column;
         align-items: center;
         margin-left: 200px;
     }
 }
+
 @media (max-width: 576px) {
-    
+
     .admin {
         display: none;
     }
-    .logo{
+
+    .logo {
         justify-content: center;
     }
 
@@ -149,29 +171,41 @@ li a{
         text-align: center;
     }
 
-    .all-box, .stats-box {
+    .all-box,
+    .stats-box {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
+
     .d-flex {
         flex-direction: column;
     }
+
     .navigation-container {
-        margin-bottom: 20px; /* Adjust the space between navigation and form */
+        margin-bottom: 20px;
+        /* Adjust the space between navigation and form */
     }
+
     .logo {
-        text-align: center; /* Center the text within the logo div */
+        text-align: center;
+        /* Center the text within the logo div */
     }
-    ul,li{
+
+    ul,
+    li {
         padding-left: 0px;
     }
+
     .navigation-container {
-        width: 100%; /* Occupy full width */
-        text-align: center; /* Center the text within the navigation container */
+        width: 100%;
+        /* Occupy full width */
+        text-align: center;
+        /* Center the text within the navigation container */
     }
-.logout{
-    margin-left: 0px;
-    padding-left: 0px;
-}   
+
+    .logout {
+        margin-left: 0px;
+        padding-left: 0px;
+    }
 }

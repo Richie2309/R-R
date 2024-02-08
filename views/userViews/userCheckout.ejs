@@ -228,15 +228,21 @@
 
                     <div class="d-block my-3">
                         <form id="checkoutForm">
+                            <% if (total > 3000) { %>
                             <label style="font-weight: bold;">
                                 <input type="radio" name="paymentMethod" value="online" onchange="proceedToBuy()">
                                 Online Payment
                             </label><br> 
-
+                            <% } else { %>
+                                <label style="font-weight: bold;">
+                                    <input type="radio" name="paymentMethod" value="online" onchange="proceedToBuy()">
+                                    Online Payment
+                                </label><br> 
                             <label style="font-weight: bold;">
                                 <input type="radio" name="paymentMethod" value="cod" onchange="proceedToBuy()">
                                 Cash on Delivery
                             </label>
+                            <% } %>
                             <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
                                 return total + (item.pDetail[0].price *
                                 item.products.units);
@@ -293,6 +299,7 @@
             }
         }
     </script>
+    
 </body>
 
 </html>
