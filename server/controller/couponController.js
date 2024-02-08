@@ -8,7 +8,6 @@ exports.adminAddCoupon = async (req, res) => {
         const code = req.body.code ? req.body.code.trim().toUpperCase() : undefined;
         const discount = req.body.discount ? req.body.discount.trim() : undefined;
         const minPrice = req.body.minPrice ? req.body.minPrice.trim() : undefined;
-        const maxUse = req.body.maxUse ? req.body.maxUse.trim() : undefined;
         const expiry = req.body.expiry ? req.body.expiry.trim() : undefined;
 
         if (!code) {
@@ -20,9 +19,7 @@ exports.adminAddCoupon = async (req, res) => {
         if (!minPrice) {
             req.session.minPrice = `This Field is required`;
         }
-        if (!maxUse) {
-            req.session.maxUse = `This Field is required`;
-        }
+
         if (!expiry) {
             req.session.expiry = `This Field is required`;
         }
@@ -35,7 +32,7 @@ exports.adminAddCoupon = async (req, res) => {
                 req.session.code = 'This coupon already exist';
             }
         }
-        if (req.session.code || req.session.discount || req.session.maxUse || req.session.minPrice || req.session.expiry) {
+        if (req.session.code || req.session.discount || req.session.minPrice || req.session.expiry) {
             return res.status(401).redirect('/adminAddCoupon');
         }
 
@@ -43,7 +40,6 @@ exports.adminAddCoupon = async (req, res) => {
             code,
             discount,
             minPrice,
-            maxUse,
             expiry
         })
         await newCoupon.save();
@@ -55,12 +51,55 @@ exports.adminAddCoupon = async (req, res) => {
 }
 
 //To delete a coupon
-exports.adminDeleteCoupon = async (req,res) => {
+exports.adminDeleteCoupon = async (req, res) => {
     try {
         const couponId = req.query.couponId;
         await adminDbHelpers.adminDeleteCoupon(couponId);
         res.status(200).send('deleted');
     } catch (err) {
         console.log('coupon controller err in delete coupon', err);
+    }
+}
+
+//User apply coupon
+exports.userApplyCoupon = async (req, res) => {
+    try {
+        const couponCode = req.query.couponCode
+        const coupon = await couponDb.findOne({ code: couponCode })
+        console.log(coupon, 'code by findone');
+
+        const cartProducts = await userDbHelpers.getCartItems(req.session.isUserAuth);
+
+        const total = cartProducts.reduce((total, value) => {
+            return total += Math.round((value.pDetail[0].price * value.products.units));
+        }, 0);
+
+
+
+        const currentDate = new Date();
+        if (!coupon) {
+            const invalid = 'Invalid coupon'
+            res.status(200).json({ error: invalid });
+        }
+        if (coupon) {
+            if (coupon.expiry < currentDate) {
+                const exp = 'Coupon expired'
+                res.status(200).json({ error: exp });
+            } else if (coupon.minPrice > total) {
+
+                const min = `Minimum purchase price is ${coupon.minPrice}`
+                res.status(200).json({ error: min });
+            } else {
+                const discount = total * (coupon.discount / 100);
+                const afterCoupon = total - discount;
+                req.session.totalPrice=afterCoupon
+                req.session.discount = discount;
+                res.status(200).json({ afterCoupon: afterCoupon, discount: discount });
+            }
+        }
+        // res.redirect(`/userCheckout`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
     }
 }

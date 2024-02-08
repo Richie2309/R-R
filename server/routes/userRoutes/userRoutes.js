@@ -8,6 +8,7 @@ const addressController = require('../../controller/addressController')
 const cartController = require('../../controller/cartController')
 const productController = require('../../controller/productController')
 const orderController = require('../../controller/orderController')
+const couponController =require('../../controller/couponController')
 
 //Home and product pages
 route.get('/', userAuthMiddleware.isUserBlocked, userRender.homepage)
@@ -47,8 +48,6 @@ route.post('/userResetPassword', userController.userResetPassword)
 //Logout
 route.get('/userLogout', userController.userLogout)
 
-
-
 // User profile
 route.get('/userProfile', userAuthMiddleware.isUserBlocked, userAuthMiddleware.isUserAuth2, userRender.userProfile)
 
@@ -76,6 +75,8 @@ route.get('/userCart', userAuthMiddleware.isUserAuth2, userRender.userCart)
 route.get('/userDeleteCart', userAuthMiddleware.isUserAuth2, cartController.userDeleteCart)
 
 route.get('/updateQuantity', userAuthMiddleware.isUserAuth2, cartController.updateQuantity)
+
+route.get('/userApplyCoupon', userAuthMiddleware.isUserAuth2, couponController.userApplyCoupon)
 
 // Checkout
 route.get('/userCheckOut', userAuthMiddleware.isUserAuth2, userAuthMiddleware.cartItemsTrue,userRender.userCheckout)

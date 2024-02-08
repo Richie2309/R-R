@@ -56,6 +56,10 @@ const orderSchema = new mongodb.Schema({
         type: String,
         required: true
     },
+    totalPrice:{
+        type:Number,
+        required:true
+    },
     orderDate: {
         type: Date,
         default: Date.now()

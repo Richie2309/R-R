@@ -169,26 +169,6 @@
                                     <div class="col-lg-4 bg-light text-dark rounded-4">
                                         <div class="p-5 rounded-4">
                                             <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
-                                            <hr class="border-5 text-dark">
-                                            <h5 class="text-uppercase mb-3 text-success">Give code</h5>
-                                            <form class="card p-2">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control border-success"
-                                                        placeholder="Promo code">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-success">Redeem</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                            <!-- <div class="mb-5">
-                                                <div class="form-outline">
-                                                    <input type="text" id="form3Examplea2"
-                                                        class="form-control form-control-lg border border-1 border-success" />
-                                                    <label class="form-label text-success" for="form3Examplea2">Enter your
-                                                        code</label>
-                                                </div>
-                                            </div> -->
-
                                             <hr class="my-4 b border-5 text-dark">
 
                                             <div class="d-flex justify-content-between mb-4">
@@ -201,8 +181,8 @@
                                             </div>
 
                                             <div class="d-flex justify-content-between mb-4">
-                                                <h5 class="text-uppercase">Discount</h5>
-                                                <h5>₹ </h5>
+                                                <h5 class="text-uppercase">Shipping</h5>
+                                                <h5 class="text-success">FREE</h5>
                                             </div>
 
 
@@ -272,6 +252,60 @@
             }
 
         </script>
+        <!-- <script>
+            $(document).ready(function() {
+        $('#redeem-btn').click(function() {
+            var couponCode = $('#couponCode').val();
+            $.ajax({
+                type: 'POST',
+                url: '/api/userApplyCoupon',
+                data: { couponCode: couponCode },
+                success: function(response) {
+                    if (response.message) {
+                        console.log(response);
+                        $('#error-message').html('<p class="error m-0 text-danger">' + response.message + '</p>');
+                    } else {
+                        // Update the total with the discount if available
+                        if (response.discount) {
+
+                            console.log(response.discount);
+
+                            discount(response.discount)
+
+                            // Update the total with discount
+                            // var discountedTotal = ( * (1 - response.discount / 100)).toFixed(2);
+                            // $('.total-price').text(discountedTotal);
+                        }
+                    }
+                },
+                error: function(response) {
+                    let {message} = response.responseJSON
+                    $('#error-message').html('<p class="error m-0 text-danger">' + message + '</p>');
+                }
+            });
+        });
+    });
+    function discount(a){
+       console.log(a,'jkhfgdfd');
+       var b=document.getElementById('total-display').innerHTML
+       console.log(b);
+       let k=b*Number(a)/100
+       document.getElementById('total-display').innerText=b-k
+       console.log(b*Number(a)/100,'juygfdszkjhgfhx')
+       document.getElementById('redeem-btn').disabled = true;
+       document.getElementById('remove-btn').hidden = false;
+    }
+        </script> -->
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+

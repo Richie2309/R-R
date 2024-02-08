@@ -256,7 +256,6 @@ exports.adminAddCoupon = async (req, res) => {
       errMesg: {
         code: req.session.code,
         discount: req.session.discount,
-        maxUse: req.session.maxUse,
         minPrice: req.session.minPrice,
         expiry: req.session.expiry,
       }
@@ -267,7 +266,6 @@ exports.adminAddCoupon = async (req, res) => {
       }
       delete req.session.code;
       delete req.session.discount;
-      delete req.session.maxUse;
       delete req.session.minPrice;
       delete req.session.expiry;
 

@@ -14,6 +14,7 @@ const userAddressdb = require('../../model/userModel/addressModel')
 const Orderdb = require('../../model/userModel/orderModel')
 const userDbHelpers = require("../../dbHelpers/userDbHelpers");
 const { v4: uuidv4 } = require('uuid');
+const session = require('express-session');
 
 var instance = new Razorpay({
   key_id: 'rzp_test_IwnjcUU9Jdcian',
@@ -494,9 +495,13 @@ exports.userCheckout = async (req, res) => {
     // Get the cart items using the helper function
     const cartProducts = await userDbHelpers.getCartItems(req.session.isUserAuth);
 
-    const total = cartProducts.reduce((total, value) => {
+    let total = cartProducts.reduce((total, value) => {
       return total += Math.round((value.pDetail[0].price * value.products.units));
     }, 0);
+
+    if(req.session.totalPrice){
+      total=req.session.totalPrice
+    }
 
     console.log(total);
 
@@ -526,6 +531,7 @@ exports.userCheckout = async (req, res) => {
     const newOrder = new Orderdb({
       userId: req.session.isUserAuth,
       orderItems: orderItems,
+      totalPrice:total,
       orderRandomId: orderRandomId,
       address: valueAddress,
       paymentMethod:

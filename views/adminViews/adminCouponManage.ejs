@@ -71,7 +71,6 @@
                                         <th class="text-center"><span class="bg-white">Code</span></th>
                                         <th class="text-center"><span class="bg-white">Discount</span></th>
                                         <th class="text-center"><span class="bg-white">Expiry</span></th>
-                                        <th class="text-center"><span class="bg-white">Max Use</span></th>
                                         <th class="text-center"><span class="bg-white">Min Purchase</span></th>
                                         <th class="text-center"><span class="bg-white">Delete</span></th>
                                     </tr>
@@ -100,11 +99,6 @@
                                                 <p class="bg-light px-1">
                                                     <%= coupons[i].expiry.toLocaleDateString() %>
                                                 </p>
-                                            </td>
-                                            <td class="text-center vertical-center">
-                                                <span class="bg-light">
-                                                    <%= coupons[i].maxUse %>
-                                                </span>
                                             </td>
                                             <td class="text-center vertical-center">
                                                 <span class="bg-light">₹<%= coupons[i].minPrice %></span>

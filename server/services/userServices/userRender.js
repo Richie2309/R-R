@@ -6,7 +6,7 @@ exports.homepage = async (req, res) => {
     const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
     const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
     delete req.session.orderSucessPage
-    res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts:cartProducts });
+    res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts: cartProducts });
 }
 
 exports.singleProductCategory = async (req, res) => {
@@ -15,7 +15,7 @@ exports.singleProductCategory = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)
         const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
-        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product.data, category: category.data, selectedCategory: name,cartProducts:cartProducts });
+        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts });
     }
     catch (err) {
         console.log(err);
@@ -32,7 +32,7 @@ exports.userProductDetail = async (req, res) => {
         //checking if product is in the cart or not
         const isCartItem = await axios.post(`http://localhost:${process.env.PORT}/api/getCartItems?productId=${productId}&userId=${userId}`);
 
-        res.render('userViews/userProductDetail', { isLoggedIn: req.session.isUserAuth, product: product.data[0], isCartItem: isCartItem.data, cartProducts:cartProducts })
+        res.render('userViews/userProductDetail', { isLoggedIn: req.session.isUserAuth, product: product.data[0], isCartItem: isCartItem.data, cartProducts: cartProducts })
     } catch (err) {
         console.log(err);
     }
@@ -131,7 +131,7 @@ exports.userProfile = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getUserInfo?userId=${userId}`)
-        res.render('userViews/userProfile', { user: user.data, cartProducts:cartProducts })
+        res.render('userViews/userProfile', { user: user.data, cartProducts: cartProducts })
     } catch (err) {
         console.log(err)
     }
@@ -143,7 +143,7 @@ exports.userEditProfile = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getUserInfo?userId=${userId}`)
         res.status(200).render('userViews/userEditProfile', {
-            user: user.data, cartProducts:cartProducts,
+            user: user.data, cartProducts: cartProducts,
             errMesg: {
                 fName: req.session.fName,
                 oldPass: req.session.oldPass,
@@ -174,7 +174,7 @@ exports.userAddress = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`)
-        res.status(200).render('userViews/userAddress', { userInfo: user.data, cartProducts:cartProducts })
+        res.status(200).render('userViews/userAddress', { userInfo: user.data, cartProducts: cartProducts })
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -190,7 +190,7 @@ exports.userAddAddress = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         res.status(200).render('userViews/userAddAddress',
             {
-                sInfo: req.session.sAddress, cartProducts:cartProducts,
+                sInfo: req.session.sAddress, cartProducts: cartProducts,
                 errMesg: {
                     fName: req.session.fName,
                     pincode: req.session.pincode,
@@ -235,7 +235,7 @@ exports.userEditAddress = async (req, res) => {
         console.log(address.data);
         res.status(200).render('userViews/userEditAddress',
             {
-                cartProducts:cartProducts,
+                cartProducts: cartProducts,
                 sInfo: req.session.sAddress,
                 addressInfo: address.data,
                 errMesg: {
@@ -289,19 +289,45 @@ exports.userCart = async (req, res) => {
 exports.userCheckout = async (req, res) => {
     const userId = req.session.isUserAuth
     try {
-        const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`)
-        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+        const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`);
+        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
         const total = cartProducts.reduce((total, value) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
-          }, 0);
+        }, 0);
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
-            res.status(200).render('userViews/userCheckout', { cartProducts: cartProducts, userInfo: user.data,total });
+            res.status(200).render('userViews/userCheckout', {
+                cartProducts: cartProducts, 
+                userInfo: user.data,
+                total,
+                // errMesg: {
+                //     // code:req.session.code,
+                //     // minPrice: req.session.minPrice,
+                //     // invalid: req.session.invalid,
+                //     // expired: req.session.expired,
+                //     // discount: req.session.discount,
+                //     // couponOk: req.session.couponOk
+                // }
+            }, (err, html) => {
+                if (err) {
+                    console.log("Render error at coupon", err);
+                    return res.status(500).send("Internal server error");
+                }
+                delete req.session.totalPrice;
+                // delete req.session.minPrice;
+                // delete req.session.invalid;
+                // delete req.session.expired;
+                // delete req.session.discount;
+                // delete req.session.couponOk;
+    
+                res.send(html);
+            });
         } else {
             // Handle the case when cartProducts is empty or doesn't have the expected structure
             res.status(200).render('userViews/userCheckout', { cartProducts: [] });
         }
-    } catch (err) {
-        res.status(500).send("Internal server error usercheckout")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
     }
 }
 
@@ -309,7 +335,7 @@ exports.userCheckout = async (req, res) => {
 exports.orderSuccess = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-        res.render('userViews/orderSuccess',{cartProducts:cartProducts},(err, html) => {
+        res.render('userViews/orderSuccess', { cartProducts: cartProducts }, (err, html) => {
             if (err) {
                 res.send('Internal server err', err);
             }
@@ -328,7 +354,7 @@ exports.userOrderHistory = async (req, res) => {
         delete req.session.orderSucessPage
         const orderItems = await userDbHelper.getOrders(req.session.isUserAuth);
         console.log(orderItems);
-        res.status(200).render('userViews/userOrderHistory', { orders: orderItems, isCancelled: req.session.isCancelled, cartProducts:cartProducts }, (err, html) => {
+        res.status(200).render('userViews/userOrderHistory', { orders: orderItems, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
             if (err) {
                 res.send('Internal server err', err);
             }
