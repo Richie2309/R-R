@@ -18,13 +18,15 @@
 
               <li>
                   <div class="form">
+                    <form action="/searchProduct" method="GET">
                       <i class="fa fa-search text-black bg-light"></i>
-                      <input type="text" class="form-control form-input bg-light text-dark" placeholder="Search">
+                      <input type="text" class="form-control form-input bg-light text-dark" name="searchQuery" placeholder="Search">
+                    </form>
                   </div>
               </li>
 
               <div class="left">
-                  <li class="nav-item p-1">
+                  <!-- <li class="nav-item p-1">
                       <% if (isLoggedIn) { %>
                           <div class="round bg-light">
                               <a class="nav-link" href="#!">
@@ -32,7 +34,7 @@
                               </a>
                           </div>
                           <% } %>
-                  </li>
+                  </li> -->
 
                   <li class="nav-item p-1">
                       <% if (isLoggedIn) { %>

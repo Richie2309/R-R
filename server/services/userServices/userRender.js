@@ -296,29 +296,16 @@ exports.userCheckout = async (req, res) => {
         }, 0);
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
             res.status(200).render('userViews/userCheckout', {
-                cartProducts: cartProducts, 
+                cartProducts: cartProducts,
                 userInfo: user.data,
                 total,
-                // errMesg: {
-                //     // code:req.session.code,
-                //     // minPrice: req.session.minPrice,
-                //     // invalid: req.session.invalid,
-                //     // expired: req.session.expired,
-                //     // discount: req.session.discount,
-                //     // couponOk: req.session.couponOk
-                // }
             }, (err, html) => {
                 if (err) {
                     console.log("Render error at coupon", err);
                     return res.status(500).send("Internal server error");
                 }
                 delete req.session.totalPrice;
-                // delete req.session.minPrice;
-                // delete req.session.invalid;
-                // delete req.session.expired;
-                // delete req.session.discount;
-                // delete req.session.couponOk;
-    
+
                 res.send(html);
             });
         } else {
@@ -330,7 +317,6 @@ exports.userCheckout = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
-
 
 exports.orderSuccess = async (req, res) => {
     try {
@@ -348,6 +334,7 @@ exports.orderSuccess = async (req, res) => {
     }
 }
 
+//To see the order history in user side
 exports.userOrderHistory = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
@@ -361,6 +348,15 @@ exports.userOrderHistory = async (req, res) => {
             delete req.session.isCancelled;
             res.send(html);
         })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+//User Wallet
+exports.userWallet = async (req, res) => {
+    try {
+        res.render('userViews/userWallet')
     } catch (err) {
         console.log(err);
     }

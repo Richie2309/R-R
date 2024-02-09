@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/users/userWallet.css">
+    <style>
+        .modal-header {
+            .close {
+                margin-top: -1.5rem;
+            }
+        }
+
+        .form-title {
+            margin: -2rem 0rem 2rem;
+        }
+
+        .subscribe-form {
+            margin: 0rem 0rem 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-scroll shadow-0 bg-black mb-4">
+        <div class="container">
+            <a class="navbar-brand text-light" href="#!">R&R<br>Wares</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars text-light"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="him">
+                        <!-- <a class="nav-link him" href="#!">FOR HIM</a> -->
+                    </li>
+                    <li class="nav-item" id="her">
+                        <!-- <a class="nav-link her" href="#!">FOR HER</a> -->
+                    </li>
+
+                    <li>
+                        <div class="form">
+                            <i class="fa fa-search text-black bg-light"></i>
+                            <input type="text" class="form-control form-input bg-light text-dark" placeholder="Search">
+                        </div>
+                    </li>
+
+                    <div class="left">
+
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="userSigninEmail">
+                                    <i class="fa-solid fa-user text-black"></i>
+                                </a>
+                            </div>
+
+                        </li>
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="/userCart">
+                                    <div class="position-relative contain">
+                                        <i class="fa-solid fa-cart-shopping text-black"></i>
+                                        <%# if (cartProducts.length) { %>
+                                            <span class="position-absolute badgeCustom">
+                                                <p class="count text-black">
+                                                    <%#= cartProducts.length %>
+                                                </p>
+                                            </span>
+                                            <%# } %>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item p-1">
+                            <div class="round bg-light">
+                                <a class="nav-link" href="/userLogout">
+                                    <button class="border-0"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                </a>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Navbar -->
+    <main>
+        <div class="w-75 mx-auto colorgraph m-4 p-3">
+            <h1 class="mb-4 text-center">Your Wallet</h1>
+            <hr>
+            <div class="text-left">
+                <p class="px-3">TOP-UP WALLET CREDIT NOW!</p>
+                <h5 class="px-3">Current balance: ₹ 10000</h5>
+
+                <button type="button" class="m-3 btn btn-success border-custom-color" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">TOP-UP</button>
+                </div>
+                <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-3 border-warning">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Top-Up Your Wallet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/addWallet" method="post">
+                    <div class="mb-3">
+                        <label for="amount" class="form-label fw-bold">Enter the Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Top-Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!-- MODAL END -->
+
+            <h4 class="text-center">Transaction History</h4>
+            <div class="text-center mx-2"> <!-- Center the content horizontally -->
+                <table class="table table-striped mb-5">
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tBody">
+                        <tr>
+                            <td>e</td>
+                            <td class="text-success">sdf</td>
+                            <td class="text-danger">sadf</td>
+                        </tr>
+                        <tr>
+                            <td>e</td>
+                            <td class="text-success">sdf</td>
+                            <td class="text-danger">sadf</td>
+                        </tr>
+                        <tr>
+                            <td>e</td>
+                            <td class="text-success">sdf</td>
+                            <td class="text-danger">sadf</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+      
+    <%-include('include/footer')-%>
+
+</body>
+
+</html>

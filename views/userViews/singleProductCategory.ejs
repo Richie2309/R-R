@@ -85,13 +85,13 @@
 
         <div class="type p-2 mb-2">
 
-          <div class="d-flex justify-content-between mt-2">
+          <!-- <div class="d-flex justify-content-between mt-2">
             <div class="form-check">
               Price
               </label>
             </div>
-          </div>
-          <div class="d-flex justify-content-between mt-2">
+          </div> -->
+          <!-- <div class="d-flex justify-content-between mt-2">
             <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
                 checked> <label class="form-check-label" for="flexCheckChecked">
                 Below 100,000 </label> </div>
@@ -110,7 +110,7 @@
             <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
                 checked> <label class="form-check-label" for="flexCheckChecked">
                 Above 300,000 </label> </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -118,9 +118,9 @@
       <div class="col-md-9">
         <div class="row g-2">
           <% for(let i=0; i < product.length; i++){ %>
-            <div class="col-md-4 mb-1">
+            <div class="col-md-3 mb-1 rounded-3">
               <div class="product py-4">
-                <div class="text-xl-end"><i class="fa-regular fa-heart"></i></div>
+                <div class="text-xl-end"></div>
                 <div class="text-center">
                   <a href="/userProductDetail?productId=<%= product[i]._id %>">
                     <img class="img-fluid" src="<%= product[i].images[0] %>" width="200"
@@ -130,7 +130,7 @@
                   <h5>
                     <%= product[i].brand %>
                   </h5>
-                  <span>$<%= product[i].price.toFixed(2) %></span>
+                  <span>₹<%= product[i].price.toFixed(2) %></span>
                 </div>
               </div>
             </div>

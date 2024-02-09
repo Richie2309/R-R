@@ -92,6 +92,9 @@ route.get('/userOrderHistory', userAuthMiddleware.isUserAuth2, userRender.userOr
 
 route.get('/userCancelOrder', userAuthMiddleware.isUserAuth2, orderController.userCancelOrder)
 
+//User Wallet
+route.get('/userWallet', userAuthMiddleware.isUserAuth2, userRender.userWallet)
+
 // //api
 route.get('/api/productByCategory', productController.productByCategory);
 
