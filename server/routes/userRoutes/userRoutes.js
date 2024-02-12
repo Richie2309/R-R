@@ -9,6 +9,7 @@ const cartController = require('../../controller/cartController')
 const productController = require('../../controller/productController')
 const orderController = require('../../controller/orderController')
 const couponController =require('../../controller/couponController')
+const walletController =require('../../controller/walletController')
 
 //Home and product pages
 route.get('/', userAuthMiddleware.isUserBlocked, userRender.homepage)
@@ -17,6 +18,8 @@ route.get('/singleProductCategory', userAuthMiddleware.isUserBlocked, userRender
 
 route.get('/userProductDetail', userAuthMiddleware.isUserBlocked, userRender.userProductDetail)
 
+route.get('/searchProduct', userAuthMiddleware.isUserBlocked, userRender.singleProductCategory)
+ 
 //Sign in
 route.get('/userSigninEmail', userAuthMiddleware.isUserAuth, userRender.userSigninEmail)
 route.post('/userSigninEmail', userController.userSigninEmail)
@@ -94,6 +97,8 @@ route.get('/userCancelOrder', userAuthMiddleware.isUserAuth2, orderController.us
 
 //User Wallet
 route.get('/userWallet', userAuthMiddleware.isUserAuth2, userRender.userWallet)
+
+route.post('/addWalletMoney', userAuthMiddleware.isUserAuth2, walletController.addWalletMoney)
 
 // //api
 route.get('/api/productByCategory', productController.productByCategory);

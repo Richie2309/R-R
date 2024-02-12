@@ -11,11 +11,18 @@ exports.homepage = async (req, res) => {
 
 exports.singleProductCategory = async (req, res) => {
     try {
+        const search = req.query.search;
+        console.log('single product cT searc',search);
         const name = req.query.name
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)
         const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
         res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts });
+        if (search) {
+            const searchResults = await userDbHelper.search(search)
+            console.log('searchproduct', searchResults);
+            res.render('userViews/singleProductCategory', { product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts, searchResults });
+        }
     }
     catch (err) {
         console.log(err);

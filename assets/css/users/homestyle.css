@@ -121,12 +121,14 @@ body {
 
 .columns-container {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: space-between;
+
 }
 
 .column-image {
-    max-width: 500px; /* Set your desired maximum width */
-    max-height: 500px; /* Set your desired maximum height */
+    max-width: 250px; /* Set your desired maximum width */
+    max-height: 250px; /* Set your desired maximum height */
     width: auto;
     height: auto;
     display: block;
@@ -135,8 +137,8 @@ body {
 
 
 .qoute img {
-    max-width:1300px ; /* Set your desired maximum width */
-    max-height: 500px; /* Set your desired maximum height */
+    max-width:1450px ; /* Set your desired maximum width */
+    max-height: 600px; /* Set your desired maximum height */
     width: auto;
     height: auto;
     display: block;

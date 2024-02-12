@@ -35,9 +35,9 @@ exports.adminSignin = (req, res) => {
 
 exports.adminHome = async (req, res) => {
   try {
-    const topProducts=await adminDbHelpers.topProducts()
-    const topBrands=await adminDbHelpers.topBrands()
-    const topCategories=await adminDbHelpers.topCategories()
+    const topProducts = await adminDbHelpers.topProducts()
+    const topBrands = await adminDbHelpers.topBrands()
+    const topCategories = await adminDbHelpers.topCategories()
     const dashDetails = await adminDbHelpers.dashDetails()
     const orders = await adminDbHelpers.getAllOrders();
     const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser`);
@@ -50,21 +50,27 @@ exports.adminHome = async (req, res) => {
 //product manage
 exports.adminProductManage = async (req, res) => {
   try {
-    const products = await axios.get(`http://localhost:${process.env.PORT}/api/getProduct/1`);
-    res.status(200).render("adminViews/adminProductManage", { products: products.data }, (err, html) => {
-      if (err) {
-        console.error("Error rendering HTML:", err);
-        return res.status(500).send("Internal server error");
-      }
-      delete req.session.productInfo;
-      res.send(html);
+    const page = req.query.page || 1; 
+    const productsResponse = await axios.get(`http://localhost:${process.env.PORT}/api/getProduct/1?page=${page}`);
+    const products = productsResponse.data.products;
+    const totalPages = productsResponse.data.totalPages;
+
+    const searchQuery = req.query.Search;
+    let result
+    if (searchQuery) {
+         result = await adminDbHelpers.productSearchResult(searchQuery)
+    }
+    res.status(200).render("adminViews/adminProductManage", {
+      products: result || products,
+      totalPages: totalPages,
+      currentPage: page
     });
   } catch (err) {
-    // Handle the error within the catch block
-    console.log("render page adminproductmanage catch block");
+    console.error("Error rendering admin product management page:", err);
     res.status(500).send('Internal server error');
   }
 };
+
 
 exports.adminAddProduct = async (req, res) => {
   try {
@@ -231,7 +237,7 @@ exports.adminUserManage = async (req, res) => {
 exports.adminOrderManage = async (req, res) => {
   try {
     const orders = await adminDbHelpers.getAllOrders();
-    res.status(200).render('adminViews/adminOrderManage', { orders})
+    res.status(200).render('adminViews/adminOrderManage', { orders })
   }
   catch (err) {
     console.log("err", err);
@@ -243,7 +249,7 @@ exports.adminOrderManage = async (req, res) => {
 exports.adminCouponManage = async (req, res) => {
   try {
     const coupons = await adminDbHelpers.getAllCoupon();
-    res.render('adminViews/adminCouponManage',{coupons})
+    res.render('adminViews/adminCouponManage', { coupons })
   } catch (err) {
     console.log("err", err);
     res.send("Internal server err");

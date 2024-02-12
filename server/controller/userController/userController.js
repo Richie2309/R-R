@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
 const Razorpay = require('razorpay')
+const crypto = require("crypto");
 const Categorydb = require('../../model/adminModel/categoryModel')
 const Cartdb = require('../../model/userModel/cartModel')
 const Productdb = require('../../model/adminModel/productModel');
@@ -406,7 +407,6 @@ exports.userLogout = async (req, res) => {
   res.status(200).redirect("/");
 }
 
-
 //----PROFILE----//
 exports.userInfo = async (req, res) => {
   const userId = req.query.userId
@@ -499,8 +499,8 @@ exports.userCheckout = async (req, res) => {
       return total += Math.round((value.pDetail[0].price * value.products.units));
     }, 0);
 
-    if(req.session.totalPrice){
-      total=req.session.totalPrice
+    if (req.session.totalPrice) {
+      total = req.session.totalPrice
     }
 
     console.log(total);
@@ -519,7 +519,7 @@ exports.userCheckout = async (req, res) => {
       }
     })
     const orderRandomId = `ORDER${uuidv4().slice(0, 18)}`;
-    console.log('orderid',orderRandomId);
+    console.log('orderid', orderRandomId);
 
     orderItems.forEach(async (element) => {
       await Productdb.updateOne(
@@ -531,7 +531,7 @@ exports.userCheckout = async (req, res) => {
     const newOrder = new Orderdb({
       userId: req.session.isUserAuth,
       orderItems: orderItems,
-      totalPrice:total,
+      totalPrice: total,
       orderRandomId: orderRandomId,
       address: valueAddress,
       paymentMethod:
@@ -578,7 +578,7 @@ exports.userCheckout = async (req, res) => {
 
 exports.onlinePaymentSuccessfull = async (req, res) => {
   try {
-    const crypto = require("crypto");
+    
 
     const hmac = crypto.createHmac("sha256", 'IVbX06LxB8oMcuyvF6RZFhxt');
     hmac.update(

@@ -50,7 +50,7 @@
 				</a>
 			</div><br>
 			<div class="d-flex">
-				<form action="/adminFilterProducts" method="get">
+				<form action="/adminProductManage" method="get">
 					<input type="text" placeholder="Search by Name" name="Search" spellcheck="false" class="search"
 						required />
 					<button type="submit">
@@ -133,6 +133,15 @@
 			</div>
 		</div>
 	</div>
+	<nav aria-label="..." class="d-flex justify-content-center">
+		<ul class="pagination">
+			<% for (let i = 1; i <= totalPages; i++) { %>
+				<li class="page-item <%= currentPage == i ? 'active' : '' %>">
+					<a class="page-link" href="/adminProductManage?page=<%= i %>"><%= i %></a>
+				</li>
+			<% } %>
+		</ul>
+	</nav>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.0/dist/sweetalert2.all.min.js"></script>
 	<script>
         document.addEventListener('DOMContentLoaded', function () {

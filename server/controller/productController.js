@@ -121,9 +121,14 @@ exports.adminAddProducts = async (req, res) => {
 
 exports.showProduct = async (req, res) => {
   try {
+    const page = req.query.page || 1; // Get the requested page from query params
+    const limit = 5; // Products per page
+    const skip = (page - 1) * limit;
+    
     if (Number(req.params.value) === 1) {
-      const products = await Productdb.find({ listed: true })
-      res.send(products);
+      const totalListedProducts = await Productdb.countDocuments({ listed: true }); // Count total listed products
+      const products = await Productdb.find({ listed: true }).skip(skip).limit(limit);
+      res.send({ products: products, totalPages: Math.ceil(totalListedProducts / limit) });
     }
     else {
       const products = await Productdb.find({ listed: false })

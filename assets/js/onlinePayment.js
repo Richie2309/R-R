@@ -17,7 +17,6 @@ document.getElementById('proceedToBuyBtn').addEventListener('click', function(ev
       }
       
       if(res.success ==true){
-        console.log('hiiiii',res);
       const options = {
         "key": "rzp_test_IwnjcUU9Jdcian",
         "amount": res.order.price,

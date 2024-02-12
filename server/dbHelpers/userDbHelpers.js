@@ -5,6 +5,24 @@ const Cartdb = require('../model/userModel/cartModel')
 const Orderdb = require('../model/userModel/orderModel');
 const Productdb = require('../model/adminModel/productModel');
 
+//Search for product
+exports.search = async (search) => {
+  try {
+    const regexPattern = new RegExp(search, 'i');
+    const searchResults = await Productdb.find({
+      $or: [
+        { pName: regexPattern },
+        { brand: regexPattern },
+        { category: regexPattern },
+      ],
+    });
+    return searchResults
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+//To get all items in cart
 exports.getCartItems = async (userId) => {
   try {
     if (!userId) {
@@ -35,6 +53,7 @@ exports.getCartItems = async (userId) => {
   }
 }
 
+//To get default address
 exports.getDefaultAddress = async (userId, addressId) => {
   try {
     const agg = [
@@ -53,22 +72,12 @@ exports.getDefaultAddress = async (userId, addressId) => {
       }
     ];
     return await userAddressdb.aggregate(agg);
-    // const address = await userAddressdb.aggregate([
-    //   {
-    //     $match: { userId: new mongoose.Types.ObjectId(userId) }
-    //   },
-    //   {
-    //     $unwind: '$address'
-    //   }, {
-    //     $match: {
-    //       'address._id': new mongoose.Types.ObjectId(addressId)
-    //     }
-    //   }
   } catch (err) {
     console.log(err);
   }
 }
 
+//To get all orders
 exports.getOrders = async (userId) => {
   try {
     const agg = [

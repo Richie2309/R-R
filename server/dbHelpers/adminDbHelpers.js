@@ -236,33 +236,71 @@ exports.checkIfCouponExist = async (code) => {
     }
 }
 
-//To get count of all listing in the admin side
-exports.adminListCount = async (management) => {
+exports.productSearchResult = async (searchQuery) => {
     try {
-        if (management == 'Product') {
-            return (await Productdb.find({ listed: true })).length;
-        }
-        if (management == 'Category') {
-            return (await categoryDb.find({ status: true })).length;
-        }
-        if (management == 'User') {
-            return await Userdb.countDocuments();
-        }
-        if (management == 'Order') {
-            const totalOrders = await Orderdb.aggregate([
-                {
-                    $unwind: {
-                        path: "$orderItems",
-                    },
-                },
-            ]);
+        const searchResults = await Productdb.find({
+            $or: [
+                { brand: { $regex: searchQuery, $options: 'i' } },
+                { pName: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } }
+            ],
+            listed: true
+        });
 
-            return totalOrders.length;
-        }
-        if (management == 'Coupon') {
-            return await couponDb.countDocuments();
-        }
+        return searchResults;
     } catch (err) {
         console.log(err);
     }
 }
+//To get count of all listing in the admin side
+// exports.adminListCount = async (management) => {
+//     try {
+//         if (management == 'Product') {
+//             return (await Productdb.find({ listed: true })).length;
+//         }
+//         if (management == 'Category') {
+//             return (await categoryDb.find({ status: true })).length;
+//         }
+//         if (management == 'User') {
+//             return await Userdb.countDocuments();
+//         }
+//         if (management == 'Order') {
+//             const totalOrders = await Orderdb.aggregate([
+//                 {
+//                     $unwind: {
+//                         path: "$orderItems",
+//                     },
+//                 },
+//             ]);
+
+//             return totalOrders.length;
+//         }
+//         if (management == 'Coupon') {
+//             return await couponDb.countDocuments();
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
+// exports.getProductList = async (status = false, page = 1) => {
+//     try {
+//         const skip = Number(page) ? (Number(page) - 1) : 0;
+//         const agg = [
+//             {
+//                 $match: {
+//                     unlistedProduct: status,
+//                 },
+//             },
+//             {
+//                 $skip: (10 * skip)
+//             },
+//             {
+//                 $limit: 10
+//             }
+//         ];
+//         return await Productdb.aggregate(agg);
+//     } catch (err) {
+//         throw err;
+//     }
+// }
