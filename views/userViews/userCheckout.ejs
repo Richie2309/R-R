@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>R&R Wares</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,6 +19,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="/css/users/userCart.css">
+    <!-- favicon image -->
+    <link rel="icon" type="image/png" href="/img/pngegg.png">
 </head>
 
 <body>
@@ -247,6 +249,16 @@
                                     <input type="radio" name="paymentMethod" value="online" onchange="proceedToBuy()">
                                     Online Payment
                                 </label><br>
+                                <label style="font-weight: bold;">
+                                    <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
+                                    Wallet, Balance: <b>₹ <%= walletInfo.balance || 0 %></b>
+                                </label>
+                                <% if (walletErrorMessage) { %>
+                                    <p class="text-danger"><%= walletErrorMessage %></p>
+                                <% } else {%>
+                                    <p class="text-success">You can order with wallet money</p>
+                                    <% } %>
+                                <br>
                                 <% } else { %>
                                     <label style="font-weight: bold;">
                                         <input type="radio" name="paymentMethod" value="online"
@@ -256,6 +268,10 @@
                                     <label style="font-weight: bold;">
                                         <input type="radio" name="paymentMethod" value="cod" onchange="proceedToBuy()">
                                         Cash on Delivery
+                                    </label>
+                                    <label style="font-weight: bold;">
+                                        <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
+                                        Wallet
                                     </label>
                                     <% } %>
                                         <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
@@ -282,7 +298,6 @@
 
                 // Get the value entered by the user
                 var couponCodeValue = couponCodeInput.value;
-                console.log(couponCodeValue);
 
                 // Perform the Fetch request
                 fetch(`/userApplyCoupon?couponCode=${couponCodeValue}`, {
@@ -300,7 +315,6 @@
                     })
                     .then((data) => {
                         // Handle the successful response here
-                        console.log("Response from server:", data);
 
 
                         // Set the innerHTML outside the fetch block
@@ -338,15 +352,14 @@
             async function setAsDefault(addressId) {
                 try {
                     const response = await fetch(`/changeAddress?id=${addressId}`, {
-                        method: 'GET', // or 'POST' based on your server route
+                        method: 'GET', 
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
 
                     if (response.ok) {
-                        // Reload the page or update the UI as needed
-                        location.reload(); // Example: reload the page
+                        location.reload(); 
                     } else {
                         console.error('Failed to set default address');
                     }
@@ -356,23 +369,18 @@
             }
 
             function proceedToBuy() {
-                // Check if payment method and address are selected
                 var selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
                 var selectedAddress = document.querySelector('.addresses-item.border-primary');
 
                 var proceedButton = document.getElementById('proceedToBuyBtn');
 
                 if (selectedPaymentMethod && selectedAddress) {
-                    // If both payment method and address are selected, show the button
                     proceedButton.style.display = 'block';
                 } else {
-                    // If either payment method or address is not selected, hide the button
                     proceedButton.style.display = 'none';
                 }
             }
         </script>
 </body>
-
 </html>
 
-<!-- kjdfhakjhgkjah -->

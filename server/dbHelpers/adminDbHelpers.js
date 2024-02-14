@@ -77,7 +77,6 @@ exports.topBrands = async () => {
         ];
         return await Orderdb.aggregate(agg);
     } catch (error) {
-        console.log("Error in topBrands:", error);
         throw error;
     }
 }
@@ -115,7 +114,6 @@ exports.topCategories = async () => {
         ];
         return await Orderdb.aggregate(agg);
     } catch (error) {
-        console.log("Error in topCategories:", error);
         throw error;
     }
 }
@@ -184,7 +182,6 @@ exports.dashDetails = async () => {
                 },
             }
         ])
-        console.log('totl prft', totalSales?.profit);
         return { profit: totalSales?.profit }
 
     } catch (err) {

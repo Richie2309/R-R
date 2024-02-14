@@ -12,7 +12,6 @@ exports.homepage = async (req, res) => {
 exports.singleProductCategory = async (req, res) => {
     try {
         const search = req.query.search;
-        console.log('single product cT searc',search);
         const name = req.query.name
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)
@@ -20,7 +19,6 @@ exports.singleProductCategory = async (req, res) => {
         res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts });
         if (search) {
             const searchResults = await userDbHelper.search(search)
-            console.log('searchproduct', searchResults);
             res.render('userViews/singleProductCategory', { product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts, searchResults });
         }
     }
@@ -160,7 +158,6 @@ exports.userEditProfile = async (req, res) => {
         },
             (err, html) => {
                 if (err) {
-                    console.log("Render error edit profile");
                     return res.send("Internal server error");
                 }
                 delete req.session.fName;
@@ -190,7 +187,6 @@ exports.userAddress = async (req, res) => {
 
 exports.userAddAddress = async (req, res) => {
     const { returnTo } = req.query
-    console.log(returnTo);
     if (returnTo)
         req.session.returnTo = returnTo
     try {
@@ -209,7 +205,6 @@ exports.userAddAddress = async (req, res) => {
             },
             (err, html) => {
                 if (err) {
-                    console.log("Render erorr at add address", err);
                     return res.status(500).send("Internal server error");
                 }
                 delete req.session.fName;
@@ -230,16 +225,13 @@ exports.userAddAddress = async (req, res) => {
 
 exports.userEditAddress = async (req, res) => {
     const { returnTo } = req.query
-    console.log(returnTo);
     if (returnTo)
         req.session.returnTo = returnTo
     const userId = req.session.isUserAuth
     const addressId = req.query.addressId
-    console.log(addressId);
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         const address = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}&addressId=${addressId}`)
-        console.log(address.data);
         res.status(200).render('userViews/userEditAddress',
             {
                 cartProducts: cartProducts,
@@ -257,7 +249,6 @@ exports.userEditAddress = async (req, res) => {
             },
             (err, html) => {
                 if (err) {
-                    console.log("Render erorr at edit address", err);
                     return res.status(500).send("Internal server error");
                 }
                 delete req.session.fName;
@@ -297,18 +288,26 @@ exports.userCheckout = async (req, res) => {
     const userId = req.session.isUserAuth
     try {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`);
+        const walletInfo= await userDbHelper.getWallet(req.session.isUserAuth)
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
         const total = cartProducts.reduce((total, value) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
         }, 0);
+
+        let walletErrorMessage = '';
+        if (walletInfo && walletInfo.balance < total) {
+            walletErrorMessage = 'Insufficient balance in wallet';
+        }
+
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
             res.status(200).render('userViews/userCheckout', {
                 cartProducts: cartProducts,
                 userInfo: user.data,
                 total,
+                walletInfo,
+                walletErrorMessage
             }, (err, html) => {
                 if (err) {
-                    console.log("Render error at coupon", err);
                     return res.status(500).send("Internal server error");
                 }
                 delete req.session.totalPrice;
@@ -347,7 +346,6 @@ exports.userOrderHistory = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         delete req.session.orderSucessPage
         const orderItems = await userDbHelper.getOrders(req.session.isUserAuth);
-        console.log(orderItems);
         res.status(200).render('userViews/userOrderHistory', { orders: orderItems, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
             if (err) {
                 res.send('Internal server err', err);
@@ -363,7 +361,9 @@ exports.userOrderHistory = async (req, res) => {
 //User Wallet
 exports.userWallet = async (req, res) => {
     try {
-        res.render('userViews/userWallet')
+        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+        const walletInfo= await userDbHelper.getWallet(req.session.isUserAuth)
+        res.render('userViews/userWallet', {walletInfo, cartProducts});
     } catch (err) {
         console.log(err);
     }

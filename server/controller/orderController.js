@@ -33,7 +33,6 @@ exports.userCancelOrder = async (req, res) => {
 
 exports.invoice = async (req, res) => {
     const id = req.query.id
-    console.log(id,'is in order controller');
     try {
       const order = await Orderdb.findOne({ _id: id })
       

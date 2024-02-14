@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>R&R Wares</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,6 +19,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="/css/users/userCart.css">
+    <!-- favicon image -->
+    <link rel="icon" type="image/png" href="/img/pngegg.png">
 </head>
 
 <body>
@@ -241,7 +243,6 @@
                 })
                     .then(res => {
                         if (res.status) {
-                            console.log('Backend response:', res);
                             // Reload the page
                             location.reload();
                         }
@@ -262,13 +263,11 @@
                 data: { couponCode: couponCode },
                 success: function(response) {
                     if (response.message) {
-                        console.log(response);
                         $('#error-message').html('<p class="error m-0 text-danger">' + response.message + '</p>');
                     } else {
                         // Update the total with the discount if available
                         if (response.discount) {
 
-                            console.log(response.discount);
 
                             discount(response.discount)
 
@@ -286,12 +285,9 @@
         });
     });
     function discount(a){
-       console.log(a,'jkhfgdfd');
        var b=document.getElementById('total-display').innerHTML
-       console.log(b);
        let k=b*Number(a)/100
        document.getElementById('total-display').innerText=b-k
-       console.log(b*Number(a)/100,'juygfdszkjhgfhx')
        document.getElementById('redeem-btn').disabled = true;
        document.getElementById('remove-btn').hidden = false;
     }

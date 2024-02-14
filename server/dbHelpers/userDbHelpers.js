@@ -4,6 +4,7 @@ const userAddressdb = require('../model/userModel/addressModel')
 const Cartdb = require('../model/userModel/cartModel')
 const Orderdb = require('../model/userModel/orderModel');
 const Productdb = require('../model/adminModel/productModel');
+const walletDb = require('../model/userModel/walletModel')
 
 //Search for product
 exports.search = async (search) => {
@@ -127,6 +128,27 @@ exports.userCancelOrder = async (orderId, productId) => {
       });
 
     return;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+//To get wallet information
+exports.getWallet = async (userId) => {
+  try {
+    // const agg = [
+    //   {
+    //     $match: {
+    //       userId: new mongoose.Types.ObjectId(userId),
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$transactions"
+    //   }    
+    // ];
+    // return await walletDb.aggregate(agg);
+    return await walletDb.findOne({ userId: userId }).exec();
+
   } catch (err) {
     console.log(err);
   }

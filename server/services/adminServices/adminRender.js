@@ -109,21 +109,6 @@ exports.adminAddProduct = async (req, res) => {
   }
 }
 
-// const product = { pName: req.session.pName, brand: req.session.brand, category: req.session.category, pDescription: req.session.pDescription, price: req.session.price, units: req.session.units };
-// res.status(200).render('adminViews/adminAddProduct', { product: product }, (err, html) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   delete req.session.pName;
-//   delete req.session.brand;
-//   delete req.session.category;
-//   delete req.session.pDescription;
-//   delete req.session.price;
-//   delete req.session.units;
-//   res.send(html)
-// })
-// }
-
 exports.adminUpdateProduct = async (req, res) => {
   try {
     const [category, product] = await Promise.all([
@@ -171,9 +156,7 @@ exports.adminUpdateProduct = async (req, res) => {
 
 exports.adminUnlistedProduct = async (req, res) => {
   try {
-    console.log("before");
     const product = await axios.get(`http://localhost:${process.env.PORT}/api/getProduct/0`);
-    console.log(product);
 
     res.status(200).render('adminViews/adminUnlistedProduct', { products: product.data })
   } catch (error) {
@@ -209,9 +192,7 @@ exports.adminUpdateCategory = async (req, res) => {
     const category = await axios.get(`http://localhost:${process.env.PORT}/api/getSingleCategory?id=${req.query.id}`)
     res.status(200).render('adminViews/adminUpdateCategory',
       { category: category.data, errMesg: req.session.category })
-    // console.log(category);
   } catch (err) {
-    // console.log("err", err.message);
     res.send("Internal server err");
   }
 }

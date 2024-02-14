@@ -20,7 +20,6 @@ function capitalizeFirstLetter(str) {
 
 exports.productByCategory = async (req, res) => {
   const category = req.query.name
-  console.log(category);
   try {
     if (!category) {
       res.redirect('/')
@@ -84,7 +83,6 @@ exports.adminAddProducts = async (req, res) => {
       req.session.files
     ) {
       req.session.productInfo = req.body;
-      console.log('all fields are required')
       return res.status(401).redirect("/adminAddProduct");
     }
 
@@ -121,12 +119,12 @@ exports.adminAddProducts = async (req, res) => {
 
 exports.showProduct = async (req, res) => {
   try {
-    const page = req.query.page || 1; // Get the requested page from query params
-    const limit = 5; // Products per page
+    const page = req.query.page || 1; 
+    const limit = 5; //Product per page
     const skip = (page - 1) * limit;
     
     if (Number(req.params.value) === 1) {
-      const totalListedProducts = await Productdb.countDocuments({ listed: true }); // Count total listed products
+      const totalListedProducts = await Productdb.countDocuments({ listed: true });
       const products = await Productdb.find({ listed: true }).skip(skip).limit(limit);
       res.send({ products: products, totalPages: Math.ceil(totalListedProducts / limit) });
     }
@@ -145,7 +143,6 @@ exports.singleProduct = async (req, res) => {
   try {
     const id = req.params.value
     const products = await Productdb.find({ _id: id })
-    console.log(products);
     res.send(products);
 
     // const products = await Productdb.find({ listed: (Number(req.params.value)) ? true : false })

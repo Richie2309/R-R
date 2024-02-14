@@ -44,11 +44,8 @@ exports.adminAddCategory = async (req, res) => {
   exports.adminUpdateCategory = async (req, res) => {
     const id=req.query.id
     const name=req.body.name
-    // console.log(req.query);
-    console.log("hi");
     try {
       if (name==='undefined'||!name) {
-        console.log("undefined");
         req.session.category = `Category name cannot be empty`;
         const referer = req.get('Referrer')
         return res.redirect(303,referer);
@@ -69,9 +66,7 @@ exports.adminAddCategory = async (req, res) => {
   
   exports.singleCategory = async (req, res) => {
     const id =req.query.id
-    console.log(id);
     const result = await Categorydb.findOne({_id:id})
-    console.log(result);
     res.send(result)
   }
   

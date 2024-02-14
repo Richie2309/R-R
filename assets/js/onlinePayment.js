@@ -1,18 +1,19 @@
 document.getElementById('proceedToBuyBtn').addEventListener('click', function(event) {
   event.preventDefault()
-  console.log($('#checkoutForm').serialize());
   $.ajax({           
     url: 'userCheckout',
     data: $('#checkoutForm').serialize(),
     type: "POST"
   })
   .then(res => {
-      console.log(res.paymentMethod)
       if(res.err){
           return location.href = res.url;
       }
       
       if(res.paymentMethod == 'cod'){ 
+          return location.href = res.url;
+      }
+      if(res.paymentMethod == 'wallet'){ 
           return location.href = res.url;
       }
       
@@ -23,13 +24,12 @@ document.getElementById('proceedToBuyBtn').addEventListener('click', function(ev
         "currency": "INR",
         "name": "R&R Wares",
         "description": "Test Transaction",
-        // "image": "/userSide/images/header/logo.svg",
-        "order_id": res.order.id, //This is a sample Order ID. Pass the id obtained in the response of Step 1
+        "order_id": res.order.id, 
         "callback_url": "/onlinePaymentSuccessfull", //after sucessful payment
-        "prefill": { //We recmmend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        "prefill": {
             "name": "Richin Rajeev T R", 
             "email": "richinrajeev@gmail.com",
-            "contact": "9961576447" //Provide the customer's phone number for better conversion rates 
+            "contact": "9961576447" 
         },
         "notes": {
             "address": "Razorpay Corporate Office"
@@ -48,5 +48,4 @@ document.getElementById('proceedToBuyBtn').addEventListener('click', function(ev
       console.log(err)
   })
 
-  //   document.getElementById('confirmation-popup').style.display = 'none';
 });

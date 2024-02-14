@@ -13,6 +13,7 @@ const Productdb = require('../../model/adminModel/productModel');
 const { query } = require('express');
 const userAddressdb = require('../../model/userModel/addressModel')
 const Orderdb = require('../../model/userModel/orderModel')
+const walletDb=require('../../model/userModel/walletModel')
 const userDbHelpers = require("../../dbHelpers/userDbHelpers");
 const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
@@ -45,7 +46,6 @@ const otpGenrator = () => {
 const sendOtpMail = async (req, res, getRoute) => {
 
   const otp = otpGenrator();
-  console.log(otp);
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -203,7 +203,6 @@ exports.userSignupEmailVerifyResend = async (req, res) => {
 exports.userSignup = async (req, res) => {
   const userInfo = {};
   let { fname, password, reenterpassword } = req.body
-  console.log('body', req.body);
   if (!fname || !/^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(fname)) {
     req.session.fName = `This Field is required`;
   }
@@ -488,8 +487,8 @@ exports.userEditProfile = async (req, res) => {
 
 exports.userCheckout = async (req, res) => {
   try {
-    console.log(req.body)
     const address = await userDbHelpers.getDefaultAddress(req.session.isUserAuth, req.body.defaultAddress)
+    const walletInfo = await userDbHelpers.getWallet(req.session.isUserAuth);
     const valueAddress = address[0].address.structuredAddress
 
     // Get the cart items using the helper function
@@ -502,8 +501,6 @@ exports.userCheckout = async (req, res) => {
     if (req.session.totalPrice) {
       total = req.session.totalPrice
     }
-
-    console.log(total);
 
     // Create an order record in the Orderdb mode
     const orderItems = cartProducts.map((element) => {
@@ -519,7 +516,6 @@ exports.userCheckout = async (req, res) => {
       }
     })
     const orderRandomId = `ORDER${uuidv4().slice(0, 18)}`;
-    console.log('orderid', orderRandomId);
 
     orderItems.forEach(async (element) => {
       await Productdb.updateOne(
@@ -535,9 +531,13 @@ exports.userCheckout = async (req, res) => {
       orderRandomId: orderRandomId,
       address: valueAddress,
       paymentMethod:
-        req.body.paymentMethod === "cod" ? "cod" : "online"
+        req.body.paymentMethod === "cod" ? "cod" 
+        : req.body.paymentMethod === "online"
+        ? "online"
+        : "wallet" ?? "wallet",
     });
 
+    // if cash on delivery
     if (req.body.paymentMethod === "cod") {
       await newOrder.save();
       await Cartdb.updateOne(
@@ -551,7 +551,30 @@ exports.userCheckout = async (req, res) => {
         url: '/orderSuccess'
       })
     }
-
+    //if wallet payment
+    if (req.body.paymentMethod === "wallet") {
+      if (walletInfo && walletInfo.balance >= total) {
+      await newOrder.save();
+      await Cartdb.updateOne(
+        { userId: req.session.isUserAuth },
+        { $set: { products: [] } }
+      ); // empty cart items
+      await walletDb.updateOne(
+        { userId: req.session.isUserAuth },
+        { $inc: { balance : -(total)} },
+        { upsert: true }
+      );
+      return res.json({
+        status: "success",
+        paymentMethod: "wallet",
+        url: "/orderSuccess",
+      });
+    }else {
+      req.session.walletErrorMessage = 'Insufficient balance in wallet';
+      return res.redirect('/userCheckout'); // Redirect to checkout page to display the error message
+  }
+  }
+    //if online payment
     if (req.body.paymentMethod === "online") {
       const options = {
         amount: total * 100,
@@ -560,7 +583,6 @@ exports.userCheckout = async (req, res) => {
       };
 
       const order = await instance.orders.create(options);
-      // console.log(order);
       req.session.newOrder = newOrder;
       return res.status(200).json({
         success: true,

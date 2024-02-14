@@ -180,11 +180,9 @@ exports.getDetailsChart = async (req, res) => {
 //Sales Report
 exports.downloadSalesReport = async (req, res, next) => {
   try {
-    console.log("salesreport");
     const fromDate = req.query.fromDate
     const toDate = req.query.toDate
 
-    console.log(fromDate, toDate);
     const agg = [
       {
         $unwind: "$orderItems"
@@ -220,7 +218,6 @@ exports.downloadSalesReport = async (req, res, next) => {
       });
       count++;
     });
-    console.log(users);
     // const csv = new CsvParser(results);
     const csvFields = [
       "SI",

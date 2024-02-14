@@ -58,7 +58,6 @@ module.exports = {
                 userId: userId,
                 products: { $exists: true, $not: { $size: 0 } }
             })
-            console.log(cartItemsExist);
             if (cartItemsExist) {
                 next()
             }

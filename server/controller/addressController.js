@@ -143,13 +143,10 @@ exports.userAddAddress = async (req, res) => {
         { $set: { defaultAddress: addres.address[0]._id } }
       );
     }
-    console.log('returnTo:', returnTo);
     if (returnTo === 'userCheckout') {
       delete req.session.returnTo
-      console.log('Redirecting to userCheckout');
       res.status(200).redirect('/userCheckout');
     } else {
-      console.log('Redirecting to userAddress');
       res.redirect('/userAddress');
     }
     // res.redirect('/userAddress')
@@ -162,8 +159,6 @@ exports.userEditAddress = async (req, res) => {
   const returnTo = req.session.returnTo;
   const addressId = req.query.addressId;
   const userId = req.session.isUserAuth
-  console.log(addressId)
-  console.log(userId)
   try {
     req.body.fName = req.body.fName.trim()
     req.body.locality = req.body.locality.trim()
@@ -245,13 +240,10 @@ exports.userEditAddress = async (req, res) => {
         },
       }
     );
-    console.log('returnTo:', returnTo);
     if (returnTo === 'userCheckout') {
       delete req.session.returnTo
-      console.log('Redirecting to userCheckout');
       res.status(200).redirect('/userCheckout');
     } else {
-      console.log('Redirecting to userAddress');
       res.redirect('/userAddress');
     }
     // res.status(200).redirect("/userAddress");

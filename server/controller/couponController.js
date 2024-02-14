@@ -66,7 +66,6 @@ exports.userApplyCoupon = async (req, res) => {
     try {
         const couponCode = req.query.couponCode
         const coupon = await couponDb.findOne({ code: couponCode })
-        console.log(coupon, 'code by findone');
 
         const cartProducts = await userDbHelpers.getCartItems(req.session.isUserAuth);
 

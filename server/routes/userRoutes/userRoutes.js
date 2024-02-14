@@ -102,6 +102,8 @@ route.get('/userWallet', userAuthMiddleware.isUserAuth2, userRender.userWallet)
 
 route.post('/addWalletMoney', userAuthMiddleware.isUserAuth2, walletController.addWalletMoney)
 
+route.post('/addWalletPaymentSuccessfull', userAuthMiddleware.isUserAuth2, walletController.addWalletPaymentSuccessfull)
+
 // //api
 route.get('/api/productByCategory', productController.productByCategory);
 

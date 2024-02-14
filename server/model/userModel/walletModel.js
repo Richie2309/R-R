@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const walletSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Types.ObjectId,
-        required: true
+        type: mongoose.SchemaTypes.ObjectId,
+        required: true,
     },
     balance: {
         type: Number,
@@ -15,10 +15,13 @@ const walletSchema = new mongoose.Schema({
             },
             date: {
                 type: Date,
-                default: Date.now()
+                default: Date.now
             }
         }
     ]
 })
 
-module.exports = mongoose.model('walletdbs', walletSchema)
+const wallet = mongoose.model('walletdbs', walletSchema)
+
+module.exports = wallet
+
