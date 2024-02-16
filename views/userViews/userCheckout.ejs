@@ -268,11 +268,17 @@
                                     <label style="font-weight: bold;">
                                         <input type="radio" name="paymentMethod" value="cod" onchange="proceedToBuy()">
                                         Cash on Delivery
-                                    </label>
+                                    </label><br>
                                     <label style="font-weight: bold;">
                                         <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
-                                        Wallet
+                                        Wallet, Balance: <b>₹ <%= walletInfo.balance || 0 %></b>
                                     </label>
+                                    <% if (walletErrorMessage) { %>
+                                        <p class="text-danger"><%= walletErrorMessage %></p>
+                                    <% } else {%>
+                                        <p class="text-success">You can order with wallet money</p>
+                                        <% } %>
+                                    <br>
                                     <% } %>
                                         <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
                                 return total + (item.pDetail[0].price *
@@ -299,12 +305,10 @@
                 // Get the value entered by the user
                 var couponCodeValue = couponCodeInput.value;
 
-                // Perform the Fetch request
                 fetch(`/userApplyCoupon?couponCode=${couponCodeValue}`, {
                     method: "GET",
                     headers: {
-                        "Content-Type": "application/json", // Modify the content type if necessary
-                        // Add any other headers if needed
+                        "Content-Type": "application/json", 
                     },
                 })
                     .then((response) => {
@@ -314,20 +318,13 @@
                         return response.json();
                     })
                     .then((data) => {
-                        // Handle the successful response here
-
-
-                        // Set the innerHTML outside the fetch block
                         if (data.error) {
                             displayError(data.error);
                         } else {
                             displayCouponValue(data.afterCoupon, data.discount);
                         }
-
-
                     })
                     .catch((error) => {
-                        // Handle errors here
                         console.error("Error:", error);
                     });
             }

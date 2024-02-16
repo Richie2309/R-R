@@ -51,7 +51,7 @@ exports.addWalletPaymentSuccessfull = async (req, res) => {
                         }
                     }
                 })
-            res.redirect('/userWallet')
+            res.status(200).redirect('/orderSuccess')
         } else {
             return res.send("Payment Failed");
         }

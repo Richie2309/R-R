@@ -4,22 +4,26 @@ const userDbHelper = require('../../dbHelpers/userDbHelpers')
 
 exports.homepage = async (req, res) => {
     const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+    const recentProducts=await userDbHelper.recentProducts()
+    console.log(recentProducts);
     const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
     delete req.session.orderSucessPage
-    res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts: cartProducts });
+    res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts: cartProducts, recentProducts });
 }
 
 exports.singleProductCategory = async (req, res) => {
     try {
         const search = req.query.search;
-        const name = req.query.name
+        const name = req.query.name || ""
+        const currentPage = parseInt(req.query.page) || 1;
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-        const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)
-        const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
-        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts });
+        // const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)        
+        // const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
+        const { result: product, totalPages } = await userDbHelper.getProductByCategory(name, currentPage)
+        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product, selectedCategory: name, cartProducts: cartProducts, currentPage: currentPage, totalPages: totalPages });
         if (search) {
             const searchResults = await userDbHelper.search(search)
-            res.render('userViews/singleProductCategory', { product: product.data, category: category.data, selectedCategory: name, cartProducts: cartProducts, searchResults });
+            res.render('userViews/singleProductCategory', { product: product, selectedCategory: name, cartProducts: cartProducts, searchResults, currentPage: currentPage, totalPages: totalPages });
         }
     }
     catch (err) {
@@ -288,7 +292,7 @@ exports.userCheckout = async (req, res) => {
     const userId = req.session.isUserAuth
     try {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`);
-        const walletInfo= await userDbHelper.getWallet(req.session.isUserAuth)
+        const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
         const total = cartProducts.reduce((total, value) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
@@ -358,12 +362,23 @@ exports.userOrderHistory = async (req, res) => {
     }
 }
 
+//To see order deails page
+exports.userOrderDetail = async (req, res) => {
+    try {
+        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+        const orderDetail = await userDbHelper.getOrderDetails(req.query.orderId,req.query.productId)
+        res.status(200).render('userViews/userOrderDetail', { cartProducts: cartProducts, orderDetail })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //User Wallet
 exports.userWallet = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-        const walletInfo= await userDbHelper.getWallet(req.session.isUserAuth)
-        res.render('userViews/userWallet', {walletInfo, cartProducts});
+        const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
+        res.render('userViews/userWallet', { walletInfo, cartProducts });
     } catch (err) {
         console.log(err);
     }

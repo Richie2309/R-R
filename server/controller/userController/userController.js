@@ -564,6 +564,7 @@ exports.userCheckout = async (req, res) => {
         { $inc: { balance : -(total)} },
         { upsert: true }
       );
+      req.session.orderSucessPage = true;
       return res.json({
         status: "success",
         paymentMethod: "wallet",
@@ -600,8 +601,6 @@ exports.userCheckout = async (req, res) => {
 
 exports.onlinePaymentSuccessfull = async (req, res) => {
   try {
-    
-
     const hmac = crypto.createHmac("sha256", 'IVbX06LxB8oMcuyvF6RZFhxt');
     hmac.update(
       req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id

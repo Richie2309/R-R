@@ -18,21 +18,21 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-exports.productByCategory = async (req, res) => {
-  const category = req.query.name
-  try {
-    if (!category) {
-      res.redirect('/')
-    }
+// exports.productByCategory = async (req, res) => {
+//   const category = req.query.name
+//   try {
+//     if (!category) {
+//       res.redirect('/')
+//     }
 
-    const result = await Productdb.find({ category: category, listed: true });
+//     const result = await Productdb.find({ category: category, listed: true });
 
-    res.send(result);
-  } catch (err) {
-    console.log("Error:", err);
-    res.status(500).render("errorPages");
-  }
-}
+//     res.send(result);
+//   } catch (err) {
+//     console.log("Error:", err);
+//     res.status(500).render("internal server error");
+//   }
+// }
 
 exports.userProductDetail = async (req, res) => {
   const productId = req.query.productId

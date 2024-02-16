@@ -8,8 +8,8 @@ const addressController = require('../../controller/addressController')
 const cartController = require('../../controller/cartController')
 const productController = require('../../controller/productController')
 const orderController = require('../../controller/orderController')
-const couponController =require('../../controller/couponController')
-const walletController =require('../../controller/walletController')
+const couponController = require('../../controller/couponController')
+const walletController = require('../../controller/walletController')
 
 //Home and product pages
 route.get('/', userAuthMiddleware.isUserBlocked, userRender.homepage)
@@ -19,7 +19,7 @@ route.get('/singleProductCategory', userAuthMiddleware.isUserBlocked, userRender
 route.get('/userProductDetail', userAuthMiddleware.isUserBlocked, userRender.userProductDetail)
 
 route.get('/searchProduct', userAuthMiddleware.isUserBlocked, userRender.singleProductCategory)
- 
+
 //Sign in
 route.get('/userSigninEmail', userAuthMiddleware.isUserAuth, userRender.userSigninEmail)
 route.post('/userSigninEmail', userController.userSigninEmail)
@@ -82,7 +82,7 @@ route.get('/updateQuantity', userAuthMiddleware.isUserAuth2, cartController.upda
 route.get('/userApplyCoupon', userAuthMiddleware.isUserAuth2, couponController.userApplyCoupon)
 
 // Checkout
-route.get('/userCheckOut', userAuthMiddleware.isUserAuth2, userAuthMiddleware.cartItemsTrue,userRender.userCheckout)
+route.get('/userCheckOut', userAuthMiddleware.isUserAuth2, userAuthMiddleware.cartItemsTrue, userRender.userCheckout)
 
 route.post('/userCheckOut', userAuthMiddleware.isUserAuth2, userController.userCheckout)
 
@@ -95,7 +95,11 @@ route.get('/userOrderHistory', userAuthMiddleware.isUserAuth2, userRender.userOr
 
 route.get('/userCancelOrder', userAuthMiddleware.isUserAuth2, orderController.userCancelOrder)
 
+route.post('/userOrderReturn', userAuthMiddleware.isUserAuth2, orderController.userOrderReturn)
+
 route.get('/invoice', userAuthMiddleware.isUserAuth2, orderController.invoice)
+
+route.get('/userOrderDetail', userAuthMiddleware.isUserAuth2, userRender.userOrderDetail)
 
 //User Wallet
 route.get('/userWallet', userAuthMiddleware.isUserAuth2, userRender.userWallet)
@@ -105,7 +109,7 @@ route.post('/addWalletMoney', userAuthMiddleware.isUserAuth2, walletController.a
 route.post('/addWalletPaymentSuccessfull', userAuthMiddleware.isUserAuth2, walletController.addWalletPaymentSuccessfull)
 
 // //api
-route.get('/api/productByCategory', productController.productByCategory);
+// route.get('/api/productByCategory', productController.productByCategory);
 
 route.get('/api/getProductDetail', productController.userProductDetail)
 

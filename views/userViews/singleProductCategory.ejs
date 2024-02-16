@@ -92,7 +92,7 @@
       <!-- Products -->
       <div class="col-md-9">
         <div class="row g-2">
-          <% for(let i=0; i < product.length; i++){ %>
+          <% for(let i=0; i < product?.length; i++){ %>
             <div class="col-md-3 mb-1 rounded-3">
               <div class="product py-4">
                 <div class="text-xl-end"></div>
@@ -114,23 +114,17 @@
       </div>
     </div>
   </div>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
+ <!-- Pagination -->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center m-5">
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+        <a class="page-link" href="singleProductCategory?name=<%= selectedCategory %>&page=<%= i %>"><%= i %></a>
       </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+    <% } %>
+  </ul>
+</nav>
+
   <%-include('include/footer')-%>
 </body>
 

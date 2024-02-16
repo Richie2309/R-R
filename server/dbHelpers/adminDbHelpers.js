@@ -145,7 +145,7 @@ exports.getAllOrders = async (filter) => {
         ];
         return await Orderdb.aggregate(agg);
     } catch (err) {
-
+        throw err
     }
 }
 

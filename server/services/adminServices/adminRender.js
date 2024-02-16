@@ -3,10 +3,7 @@ const { response } = require('express');
 const Productdb = require('../../model/adminModel/productModel');
 const { ExpressValidator } = require('express-validator');
 const adminDbHelpers = require('../../dbHelpers/adminDbHelpers')
-
-// exports.adminSignin=(req,res)=>{
-//     res.render('adminViews/adminSignin')
-// }
+const userDbHelpers=require('../../dbHelpers/userDbHelpers')
 
 exports.adminSignin = (req, res) => {
   res.render(
@@ -222,6 +219,16 @@ exports.adminOrderManage = async (req, res) => {
   }
   catch (err) {
     console.log("err", err);
+    res.send("Internal server err");
+  }
+}
+
+exports.orderManage=async(req,res)=>{
+  try{
+    const orderDetail = await userDbHelpers.getOrderDetails(req.query.orderId,req.query.productId)
+    console.log(orderDetail);
+    res.status(200).render('adminViews/adminOrderDetail', { orderDetail })
+  }catch(err){
     res.send("Internal server err");
   }
 }

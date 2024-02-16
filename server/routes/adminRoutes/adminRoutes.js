@@ -61,6 +61,8 @@ route.get('/adminUserStatus/:id/:block', adminAuthMiddleware.isAdminAuth, adminC
 //Order Manage
 route.get('/adminOrderManage', adminAuthMiddleware.isAdminAuth, adminRender.adminOrderManage)
 
+route.get('/adminOrderDetail', adminAuthMiddleware.isAdminAuth, adminRender.orderManage)
+
 route.post('/adminChangeOrderStatus', adminAuthMiddleware.isAdminAuth, orderController.adminChangeOrderStatus)
 
 //Coupon Manage

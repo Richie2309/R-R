@@ -8,7 +8,7 @@ const orderSchema = new mongodb.Schema({
     orderRandomId:{
         type: String,
         unique: true,
-        required: true
+        required: true 
     },
     orderItems: [
         {
@@ -60,6 +60,7 @@ const orderSchema = new mongodb.Schema({
         type:Number,
         required:true
     },
+    
     orderDate: {
         type: Date,
         default: Date.now()

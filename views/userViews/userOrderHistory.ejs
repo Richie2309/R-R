@@ -113,7 +113,7 @@
                                             <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                 <div class="col-md-2 col-lg-2 col-xl-2">
                                                     <img src="<%= orders[i].orderItems.images[0] %>"
-                                                        class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                        class="img-fluid rounded-3 shadow" alt="Cotton T-shirt">
                                                 </div>
                                                 <div class="col-md-3 col-lg-3 col-xl-3">
                                                     <h6 class="text-muted">
@@ -129,16 +129,23 @@
                                                 <div id="orderId" style="display: none;">
                                                     <%= orders[i]._id %>
                                                 </div>
-                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                <div class="col-md-1 col-lg-1 col-xl-1 d-flex">
 
                                                     <p>Qty: <%= orders[i].orderItems.units %>
                                                     </p>
 
                                                 </div>
-                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                <div class="col-md-1 col-lg-1 col-xl-1 offset-lg-1">
                                                     <h6 class="mb-0">
                                                         <%= orders[i].orderItems.price * orders[i].orderItems.units%>
                                                     </h6>
+                                                </div>
+                                                <div class="col-md-1 col-lg-1 col-xl-1 offset-lg-1">
+                                                    <a
+                                                        href="/userOrderDetail?orderId=<%= orders[i]._id %>&productId=<%= orders[i].orderItems.productId %>">
+                                                        <button
+                                                            class="btn btn-outline-secondary cancel-btn">Details</button>
+                                                    </a>
                                                 </div>
                                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                     <% if (orders[i].orderItems.orderStatus=="Cancelled" ) { %>
@@ -153,7 +160,12 @@
                                                                         class="fa-solid fa-file fs-4"></i></button>
 
                                                                 <h6 class="text-success">Delivered</h6>
-                                                                <a href="" class="btn text-light bg-warning">Return</a>
+                                                                <form action="/userOrderReturn" method="POST">
+                                                                    <input type="hidden" name="orderId"
+                                                                        value="<%= orders[i].orderItems._id %>">
+                                                                    <button type="submit"
+                                                                        class="btn text-light bg-warning">Return</button>
+                                                                </form>
                                                                 <% } else{%>
                                                                     <h6 class="p-2">Ordered</h6>
                                                                     <button
@@ -175,7 +187,6 @@
                                                                 Now</a></h4>
                                                     </div>
                                                     <% } %>
-
                                     </div>
                                 </div>
 
@@ -234,7 +245,7 @@
                 });
             }
 
-            function showInvoice(item,total) {
+            function showInvoice(item, total) {
                 const currentDate = new Date();
                 const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
                 var data = {
