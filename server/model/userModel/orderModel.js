@@ -5,10 +5,10 @@ const orderSchema = new mongodb.Schema({
         type: mongodb.SchemaTypes.ObjectId,
         required: true,
     },
-    orderRandomId:{
+    orderRandomId: {
         type: String,
         unique: true,
-        required: true 
+        required: true
     },
     orderItems: [
         {
@@ -50,17 +50,24 @@ const orderSchema = new mongodb.Schema({
                 default: "Ordered",
                 required: true
             },
+            couponName: {
+                type: String,
+                default: null
+            },
+            coupnDiscountAmount: {
+                type: Number,
+                default: 0
+            }
         }
     ],
     paymentMethod: {
         type: String,
         required: true
     },
-    totalPrice:{
-        type:Number,
-        required:true
+    totalPrice: {
+        type: Number,
+        required: true
     },
-    
     orderDate: {
         type: Date,
         default: Date.now()

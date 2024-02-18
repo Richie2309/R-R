@@ -487,6 +487,8 @@ exports.userEditProfile = async (req, res) => {
 
 exports.userCheckout = async (req, res) => {
   try {
+    const appliedCouponCode=req.session.appliedCouponCode
+    console.log('incontroller',appliedCouponCode)
     const address = await userDbHelpers.getDefaultAddress(req.session.isUserAuth, req.body.defaultAddress)
     const walletInfo = await userDbHelpers.getWallet(req.session.isUserAuth);
     const valueAddress = address[0].address.structuredAddress
@@ -520,7 +522,7 @@ exports.userCheckout = async (req, res) => {
     orderItems.forEach(async (element) => {
       await Productdb.updateOne(
         { _id: element.productId },
-        { $inc: { units: -element.units } }
+        { $inc: { units: -element.units } },
       );
     });
 
@@ -530,6 +532,7 @@ exports.userCheckout = async (req, res) => {
       totalPrice: total,
       orderRandomId: orderRandomId,
       address: valueAddress,
+      "orderItems.couponUsed":appliedCouponCode,
       paymentMethod:
         req.body.paymentMethod === "cod" ? "cod" 
         : req.body.paymentMethod === "online"

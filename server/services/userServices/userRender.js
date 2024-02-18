@@ -294,14 +294,20 @@ exports.userCheckout = async (req, res) => {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`);
         const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
+
         const total = cartProducts.reduce((total, value) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
         }, 0);
 
         let walletErrorMessage = '';
+        let walletSuccessMessage = '';
         if (walletInfo && walletInfo.balance < total) {
             walletErrorMessage = 'Insufficient balance in wallet';
         }
+        if (walletInfo && walletInfo.balance >= total) {
+            walletSuccessMessage = 'You can order with wallet money';
+        }
+        
 
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
             res.status(200).render('userViews/userCheckout', {
@@ -309,10 +315,12 @@ exports.userCheckout = async (req, res) => {
                 userInfo: user.data,
                 total,
                 walletInfo,
-                walletErrorMessage
+                walletErrorMessage,
+                walletSuccessMessage
             }, (err, html) => {
                 if (err) {
-                    return res.status(500).send("Internal server error");
+                    console.log(err);
+                    return res.status(500).send("Internal server on err html error");
                 }
                 delete req.session.totalPrice;
 
@@ -323,8 +331,8 @@ exports.userCheckout = async (req, res) => {
             res.status(200).render('userViews/userCheckout', { cartProducts: [] });
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal server error");
+        console.log(error);
+        res.status(500).send("Internal catch server error");
     }
 }
 

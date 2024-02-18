@@ -20,112 +20,103 @@
 
 <body>
   <%-include('include/header')-%>
-  <div class="forhim">
-    <%=selectedCategory.toUpperCase() %>
-  </div>
-  <!-- <div id="intro">
+    <div class="forhim">
+      <%=selectedCategory.toUpperCase() %>
+    </div>
+    <!-- <div id="intro">
     <img class="img img-fluid" src="/img/fhim.jpg" alt="for him">
   </div> -->
-  <div class="container-fluid mt-5 mb-5">
-    <div class="row g-2">
-      <div class="col-md-3">
+    <div class="container-fluid mt-5 mb-5">
+      <div class="row g-2">
+        <div class="col-md-3">
+          <form class="filterForm">
+            <div class="processor p-2">
+              <div class="heading d-flex justify-content-between align-items-center">
+                <h6 class="text-uppercase">Sort</h6>
+              </div>
 
-        <div class="processor p-2">
-          <div class="heading d-flex justify-content-between align-items-center">
-            <h6 class="text-uppercase">Sort</h6>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check">
-              Price Low to High
-              </label>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check">
-              Price High to Low
-              </label> </div>
-          </div>
-        </div>
-        
-        <div class="brand p-2">
-          <div class="heading d-flex justify-content-between align-items-center">
-            <h6 class="text-uppercase">Filter</h6>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check">
-              Brand
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                checked> <label class="form-check-label" for="flexCheckChecked"> Saint Honore
-              </label> </div> <span>4</span>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                checked> <label class="form-check-label" for="flexCheckChecked"> Zeroo
-              </label> </div> <span>24</span>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                checked> <label class="form-check-label" for="flexCheckChecked">
-                Koing74 </label> </div> <span>18</span>
-          </div>
-
-          <div class="d-flex justify-content-between mt-2">
-            <div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"
-                checked> <label class="form-check-label" for="flexCheckChecked"> Seiko
-              </label> </div> <span>44</span>
-          </div>
-        </div>
-
-        <div class="type p-2 mb-2">
-        </div>
-      </div>
-
-      <!-- Products -->
-      <div class="col-md-9">
-        <div class="row g-2">
-          <% for(let i=0; i < product?.length; i++){ %>
-            <div class="col-md-3 mb-1 rounded-3">
-              <div class="product py-4">
-                <div class="text-xl-end"></div>
-                <div class="text-center">
-                  <a href="/userProductDetail?productId=<%= product[i]._id %>">
-                    <img class="img-fluid" src="<%= product[i].images[0] %>" width="200"
-                      alt="<%= product[i].productName %>"></a>
+              <div class="d-flex justify-content-between mt-2">
+                <div class="form-check">
+                  <label>
+                    <input type="radio" class="filter" name="sort" value="high-to-low">
+                    High to Low
+                </label>
                 </div>
-                <div class="about text-center">
-                  <h5>
-                    <%= product[i].brand %>
-                  </h5>
-                  <span>₹<%= product[i].price.toFixed(2) %></span>
+              </div>
+
+              <div class="d-flex justify-content-between mt-2">
+                <div class="form-check">
+                  <label>
+                    <input type="radio" class="filter" name="sort" value="low-to-high">
+                    Low to High
+                </label>
+              </div>
+              </div>
+            </div>
+
+            <div class="brand p-2">
+              <div class="heading d-flex justify-content-between align-items-center">
+                <h6 class="text-uppercase">Filter</h6>
+              </div>
+
+              <div class="d-flex justify-content-between mt-2">
+                <div class="form-check">
+                  Price
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between mt-2">
+                <div class="form-check mx-2">
+                  <input type="number" name="Min" class="border border-warning rounded-3 text-center" style="width: 50px;" min="1" >
+                  <label for="">Min</label>
+                  <input type="number" name="Max" class="border border-warning rounded-3 text-center" style="width: 50px;" min="1" >
+                  <label for="">Max</label><br>
+                  <button type="submit" class="btn bg-warning text-center mt-2"><b>Apply Filters</b></button>
                 </div>
               </div>
             </div>
-            <% } %>
+          </form>
+        </div>
+
+        <!-- Products -->
+        <div class="col-md-9">
+          <div class="row g-2">
+            <% for(let i=0; i < product?.length; i++){ %>
+              <div class="col-md-3 mb-1 rounded-3">
+                <div class="product py-4">
+                  <div class="text-xl-end"></div>
+                  <div class="text-center">
+                    <a href="/userProductDetail?productId=<%= product[i]._id %>">
+                      <img class="img-fluid" src="<%= product[i].images[0] %>" width="200"
+                        alt="<%= product[i].productName %>"></a>
+                  </div>
+                  <div class="about text-center">
+                    <h5>
+                      <%= product[i].brand %>
+                    </h5>
+                    <span>₹<%= product[i].price.toFixed(2) %></span>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+          </div>
         </div>
       </div>
     </div>
-  </div>
- <!-- Pagination -->
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center m-5">
-    <% for (let i = 1; i <= totalPages; i++) { %>
-      <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-        <a class="page-link" href="singleProductCategory?name=<%= selectedCategory %>&page=<%= i %>"><%= i %></a>
-      </li>
-    <% } %>
-  </ul>
-</nav>
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center m-5">
+        <% for (let i=1; i <=totalPages; i++) { %>
+          <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+            <a class="page-link" href="singleProductCategory?name=<%= selectedCategory %>&page=<%= i %>">
+              <%= i %>
+            </a>
+          </li>
+          <% } %>
+      </ul>
+    </nav>
 
-  <%-include('include/footer')-%>
+    <%-include('include/footer')-%>
 </body>
 
 </html>

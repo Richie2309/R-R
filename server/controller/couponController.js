@@ -73,8 +73,6 @@ exports.userApplyCoupon = async (req, res) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
         }, 0);
 
-
-
         const currentDate = new Date();
         if (!coupon) {
             const invalid = 'Invalid coupon'
@@ -89,6 +87,7 @@ exports.userApplyCoupon = async (req, res) => {
                 const min = `Minimum purchase price is ${coupon.minPrice}`
                 res.status(200).json({ error: min });
             } else {
+                req.session.appliedCouponCode=coupon.code
                 const discount = total * (coupon.discount / 100);
                 const afterCoupon = total - discount;
                 req.session.totalPrice=afterCoupon

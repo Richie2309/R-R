@@ -147,7 +147,7 @@
                         <div class="text-success w-100">
                             <h5 class="text-uppercase mb-3 text-success">Give code</h5>
                             <div class="input-group">
-                                <input type="text" class="form-control border-success " name="couponCode"
+                                <input type="text" class="form-control border-success" name="couponCode"
                                     id="couponCode" placeholder="Promo code">
                                 <div class="input-group-append">
 
@@ -251,13 +251,13 @@
                                 </label><br>
                                 <label style="font-weight: bold;">
                                     <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
-                                    Wallet, Balance: <b>₹ <%= walletInfo.balance || 0 %></b>
+                                    Wallet, Balance: <b>₹ <%= walletInfo?.balance || 0 %></b>
                                 </label>
                                 <% if (walletErrorMessage) { %>
                                     <p class="text-danger"><%= walletErrorMessage %></p>
-                                <% } else {%>
-                                    <p class="text-success">You can order with wallet money</p>
-                                    <% } %>
+                                <% }else{ %>
+                                    <p class="text-success"><%= walletSuccessMessage %></p>
+                                <% } %>
                                 <br>
                                 <% } else { %>
                                     <label style="font-weight: bold;">
@@ -271,13 +271,13 @@
                                     </label><br>
                                     <label style="font-weight: bold;">
                                         <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
-                                        Wallet, Balance: <b>₹ <%= walletInfo.balance || 0 %></b>
+                                        Wallet, Balance: <b>₹ <%= walletInfo?.balance || 0 %></b>
                                     </label>
                                     <% if (walletErrorMessage) { %>
                                         <p class="text-danger"><%= walletErrorMessage %></p>
-                                    <% } else {%>
-                                        <p class="text-success">You can order with wallet money</p>
-                                        <% } %>
+                                    <% }else{ %>
+                                        <p class="text-success"><%= walletSuccessMessage %></p>
+                                    <% } %>
                                     <br>
                                     <% } %>
                                         <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
