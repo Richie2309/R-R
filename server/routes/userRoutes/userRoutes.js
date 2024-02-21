@@ -95,7 +95,7 @@ route.get('/userOrderHistory', userAuthMiddleware.isUserAuth2, userRender.userOr
 
 route.get('/userCancelOrder', userAuthMiddleware.isUserAuth2, orderController.userCancelOrder)
 
-route.get('/userOrderReturn', userAuthMiddleware.isUserAuth2, orderController.userOrderReturn)
+route.get('/userReturnOrder', userAuthMiddleware.isUserAuth2, orderController.userReturnOrder)
 
 route.get('/invoice', userAuthMiddleware.isUserAuth2, orderController.invoice)
 

@@ -31,12 +31,11 @@ exports.userCancelOrder = async (req, res) => {
   }
 }
 
-exports.userOrderReturn = async (req, res) => {
+exports.userReturnOrder = async (req, res) => {
   try {
     await userHelper.userReturnOrder(req.query.orderId, req.query.productId, req.session.isUserAuth);
     req.session.isReturned = true;
     return res.status(200).redirect("/userOrderHistory");
-   
   } catch (err) {
     res.status(500).send("Internal server error")
   }

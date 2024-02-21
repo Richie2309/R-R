@@ -160,10 +160,10 @@
                                                                         class="fa-solid fa-file fs-4"></i></button>
 
                                                                 <h6 class="text-success">Delivered</h6>
-                                                                    <button 
-                                                                        onclick="returnOrder('<%= orders[i].orderItems.productId %>','<%= orders[i]._id %>')"
-                                                                        type="button"
-                                                                        class="btn text-light bg-warning">Return</button>
+                                                                <button
+                                                                    onclick="returnOrder('<%= orders[i].orderItems.productId %>','<%= orders[i]._id %>')"
+                                                                    type="button"
+                                                                    class="btn text-light bg-warning">Return</button>
                                                                 <% } else{%>
                                                                     <h6 class="p-2">Ordered</h6>
                                                                     <button
@@ -225,6 +225,34 @@
                 )
             }
 
+
+            function returnOrder(prId, orderId) {
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showReturnButton: true,
+                    confirmButtonColor: '#3085d6',
+                    returnButtonColor: '#d33',
+                    confirmButtonText: 'Yes, return it!'
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/userReturnOrder?orderId=${orderId}&productId=${prId}`
+                        }
+
+                    });
+            }
+            const isReturned = '<%= isReturned %>';
+
+            if (Boolean(isReturned)) {
+                Swal.fire(
+                    'Product Returned!',
+                    'Your order has been Returned.',
+                    'success'
+                )
+            }
         </script>
         <script>
             function downloadInvoice(id) {

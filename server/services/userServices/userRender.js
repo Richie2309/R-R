@@ -353,13 +353,15 @@ exports.userOrderHistory = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         delete req.session.orderSucessPage
         const orderItems = await userDbHelper.getOrders(req.session.isUserAuth);
-        res.status(200).render('userViews/userOrderHistory', { orders: orderItems, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
-            if (err) {
-                res.send('Internal server err', err);
+        res.status(200).render('userViews/userOrderHistory',{ orders: orderItems, isReturned:req.session.isReturned, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
+            if(err){
+                console.error('order history err', err);
+                return res.status(500).send('Internal server err');
             }
             delete req.session.isCancelled;
-            res.send(html);
-        })
+            delete req.session.isReturned;
+            return res.status(200).send(html); 
+        });
     } catch (err) {
         console.log(err);
     }
