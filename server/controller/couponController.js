@@ -83,15 +83,14 @@ exports.userApplyCoupon = async (req, res) => {
                 const exp = 'Coupon expired'
                 res.status(200).json({ error: exp });
             } else if (coupon.minPrice > total) {
-
                 const min = `Minimum purchase price is ${coupon.minPrice}`
                 res.status(200).json({ error: min });
             } else {
                 req.session.appliedCouponCode=coupon.code
                 const discount = total * (coupon.discount / 100);
                 const afterCoupon = total - discount;
-                req.session.totalPrice=afterCoupon
-                req.session.discount = discount;
+                req.session.totalPrice= Math.round(afterCoupon)
+                req.session.couponDiscount=coupon.discount
                 res.status(200).json({ afterCoupon: afterCoupon, discount: discount });
             }
         }

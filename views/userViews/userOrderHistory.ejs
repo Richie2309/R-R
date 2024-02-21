@@ -160,20 +160,16 @@
                                                                         class="fa-solid fa-file fs-4"></i></button>
 
                                                                 <h6 class="text-success">Delivered</h6>
-                                                                <form action="/userOrderReturn" method="POST">
-                                                                    <input type="hidden" name="orderId"
-                                                                        value="<%= orders[i].orderItems._id %>">
-                                                                    <button type="submit"
+                                                                    <button 
+                                                                        onclick="returnOrder('<%= orders[i].orderItems.productId %>','<%= orders[i]._id %>')"
+                                                                        type="button"
                                                                         class="btn text-light bg-warning">Return</button>
-                                                                </form>
                                                                 <% } else{%>
                                                                     <h6 class="p-2">Ordered</h6>
                                                                     <button
                                                                         onclick="cancelOrder('<%= orders[i].orderItems.productId %>','<%= orders[i]._id %>')"
                                                                         type="button"
-                                                                        class="btn btn-outline-danger cancel-btn">
-                                                                        Cancel
-                                                                    </button>
+                                                                        class="btn btn-outline-danger cancel-btn">Cancel</button>
                                                                     <% } %>
 
                                                 </div>
@@ -228,6 +224,7 @@
                     'success'
                 )
             }
+
         </script>
         <script>
             function downloadInvoice(id) {

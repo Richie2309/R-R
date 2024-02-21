@@ -29,53 +29,93 @@
     <div class="container-fluid mt-5 mb-5">
       <div class="row g-2">
         <div class="col-md-3">
-          <form class="filterForm">
-            <div class="processor p-2">
-              <div class="heading d-flex justify-content-between align-items-center">
-                <h6 class="text-uppercase">Sort</h6>
-              </div>
-
-              <div class="d-flex justify-content-between mt-2">
-                <div class="form-check">
-                  <label>
-                    <input type="radio" class="filter" name="sort" value="high-to-low">
-                    High to Low
+          <div class="heading d-flex justify-content-between align-items-center">
+            <h6 class="text-uppercase">Sort</h6>
+          </div>
+          <div class="sortOptions">
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="1" name="sort" hidden />
+              <input type="submit" value="Price -- Low to High" class="border-0 bg-light" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="-1" name="sort" hidden />
+              <input type="submit" value="Price -- High to Low" class="border-0 bg-light" />
+            </form>
+          </div>
+          <!-- <div class="processor p-2">
+            <div class="d-flex justify-content-between mt-2">
+              <div class="form-check">
+                <label>
+                  <input type="radio" class="filter" name="sort" value="high-to-low">
+                  High to Low
                 </label>
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-between mt-2">
-                <div class="form-check">
-                  <label>
-                    <input type="radio" class="filter" name="sort" value="low-to-high">
-                    Low to High
-                </label>
-              </div>
               </div>
             </div>
 
-            <div class="brand p-2">
-              <div class="heading d-flex justify-content-between align-items-center">
-                <h6 class="text-uppercase">Filter</h6>
-              </div>
-
-              <div class="d-flex justify-content-between mt-2">
-                <div class="form-check">
-                  Price
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-between mt-2">
-                <div class="form-check mx-2">
-                  <input type="number" name="Min" class="border border-warning rounded-3 text-center" style="width: 50px;" min="1" >
-                  <label for="">Min</label>
-                  <input type="number" name="Max" class="border border-warning rounded-3 text-center" style="width: 50px;" min="1" >
-                  <label for="">Max</label><br>
-                  <button type="submit" class="btn bg-warning text-center mt-2"><b>Apply Filters</b></button>
-                </div>
+            <div class="d-flex justify-content-between mt-2">
+              <div class="form-check">
+                <label>
+                  <input type="radio" class="filter" name="sort" value="low-to-high">
+                  Low to High
+                </label>
               </div>
             </div>
-          </form>
+          </div> -->
+
+          <div class="brand p-2">
+            <div class="heading d-flex justify-content-between align-items-center">
+              <h6 class="text-uppercase">Filter</h6>
+            </div>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden> 
+              <input type="number" value="1000" name="maxPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="Under ₹1,000" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="1000" name="minPrice" hidden />
+              <input type="number" value="2000" name="maxPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="₹1000 - ₹2000" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="2000" name="minPrice" hidden />
+              <input type="number" value="3000" name="maxPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="₹2000 - ₹3000" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="3000" name="minPrice" hidden />
+              <input type="number" value="4000" name="maxPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="₹3000 - ₹4000" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="4000" name="minPrice" hidden />
+              <input type="number" value="5000" name="maxPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="₹4000 - ₹5000" />
+            </form>
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" value="5000" name="minPrice" hidden />
+              <input class="bg-transparent border-0" type="submit" value="Over ₹5000" />
+            </form>
+            <div class="d-flex justify-content-between mt-2">
+              <div class="form-check">
+                Price
+              </div>
+            </div>
+
+            <form action="" method="get">
+              <input type="text" name="name" value="<%= selectedCategory %>" hidden>
+              <input type="number" class=" border border-warning m-1 rounded-2" value="" name="minPrice" placeholder="Min" required min="1" />
+              <input type="number" class="border border-warning m-1 rounded-2" value="" name="maxPrice" placeholder="Max" required min="1"/>
+              <br>
+              <button type="submit" class="border-0 bg-primary rounded-2 mt-2">Go</button>
+            </form>
+          </div>
         </div>
 
         <!-- Products -->

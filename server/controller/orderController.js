@@ -23,7 +23,7 @@ exports.adminChangeOrderStatus = async (req, res) => {
 
 exports.userCancelOrder = async (req, res) => {
   try {
-    await userHelper.userCancelOrder(req.query.orderId, req.query.productId);
+    await userHelper.userCancelOrder(req.query.orderId, req.query.productId, req.session.isUserAuth);
     req.session.isCancelled = true;
     return res.status(200).redirect("/userOrderHistory");
   } catch (err) {
@@ -33,8 +33,10 @@ exports.userCancelOrder = async (req, res) => {
 
 exports.userOrderReturn = async (req, res) => {
   try {
-    const orderId=req.body.orderId
-    await userHelper.returnOrder(orderId)
+    await userHelper.userReturnOrder(req.query.orderId, req.query.productId, req.session.isUserAuth);
+    req.session.isReturned = true;
+    return res.status(200).redirect("/userOrderHistory");
+   
   } catch (err) {
     res.status(500).send("Internal server error")
   }

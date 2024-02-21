@@ -14,22 +14,17 @@ exports.homepage = async (req, res) => {
 exports.singleProductCategory = async (req, res) => {
     try {
         const search = req.query.search;
-        const name = req.query.name || ""
+        const name = req.query.name || "";
         const currentPage = parseInt(req.query.page) || 1;
-        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-        // const product = await axios.get(`http://localhost:${process.env.PORT}/api/productByCategory?name=${name}`)        
-        // const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
-        const { result: product, totalPages } = await userDbHelper.getProductByCategory(name, currentPage)
-        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: product, selectedCategory: name, cartProducts: cartProducts, currentPage: currentPage, totalPages: totalPages });
-        if (search) {
-            const searchResults = await userDbHelper.search(search)
-            res.render('userViews/singleProductCategory', { product: product, selectedCategory: name, cartProducts: cartProducts, searchResults, currentPage: currentPage, totalPages: totalPages });
-        }
+        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
+        const { result: products, totalPages } = await userDbHelper.getProductByCategory(name, currentPage, req.query); 
+        res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: products, selectedCategory: name, cartProducts: cartProducts, currentPage: currentPage, totalPages: totalPages });
     }
     catch (err) {
         console.log(err);
     }
 }
+
 
 exports.userProductDetail = async (req, res) => {
     try {

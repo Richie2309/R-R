@@ -8,17 +8,17 @@ const orderSchema = new mongodb.Schema({
     orderRandomId: {
         type: String,
         unique: true,
-        required: true
+        required: true 
     },
     orderItems: [
         {
             productId: {
                 type: mongodb.SchemaTypes.ObjectId,
-                required: true,
+                required: true, 
             },
             pName: {
                 type: String,
-                required: true
+                required: true 
             },
             brand: {
                 type: String,
@@ -50,11 +50,11 @@ const orderSchema = new mongodb.Schema({
                 default: "Ordered",
                 required: true
             },
-            couponName: {
+            couponCode: {
                 type: String,
                 default: null
             },
-            coupnDiscountAmount: {
+            priceAfterCoupon: {
                 type: Number,
                 default: 0
             }

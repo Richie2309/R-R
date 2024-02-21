@@ -19,21 +19,7 @@
     <link rel="stylesheet" href="/css/users/userWallet.css">
     <!-- favicon image -->
     <link rel="icon" type="image/png" href="/img/pngegg.png">
-    <style>
-        .modal-header {
-            .close {
-                margin-top: -1.5rem;
-            }
-        }
 
-        .form-title {
-            margin: -2rem 0rem 2rem;
-        }
-
-        .subscribe-form {
-            margin: 0rem 0rem 1rem;
-        }
-    </style>
 </head>
 
 <body>
@@ -83,7 +69,7 @@
                                                     <%= cartProducts.length %>
                                                 </p>
                                             </span>
-                                        <% } %>
+                                            <% } %>
                                     </div>
                                 </a>
                             </div>
@@ -108,35 +94,37 @@
             <hr>
             <div class="text-left">
                 <p class="px-3">TOP-UP WALLET CREDIT NOW!</p>
-                <h5 class="px-3">Current balance: ₹ <%= walletInfo?.balance || 0 %></h5>
+                <h5 class="px-3">Current balance: ₹ <%= walletInfo?.balance || 0 %>
+                </h5>
                 <button type="button" class="m-3 btn btn-success border-custom-color" data-bs-toggle="modal"
                     data-bs-target="#exampleModal">TOP-UP</button>
-                </div>
-                <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border border-3 border-warning">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Top-Up Your Wallet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="walletAddForm" name="walletAddForm">
-                    <div class="mb-3"> 
-                        <label for="amount" class="form-label fw-bold">Enter the Amount</label>
-                        <input type="number" class="form-control" id="amount" name="amount">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border border-3 border-warning">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Top-Up Your Wallet</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="walletAddForm" name="walletAddForm">
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label fw-bold">Enter the Amount</label>
+                                    <input type="number" class="form-control" id="amount" name="amount">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" id="addMoney">Top-Up</button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" id="addMoney" >Top-Up</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-                <!-- MODAL END -->
+            <!-- MODAL END -->
 
             <h4 class="text-center">Transaction History</h4>
             <div class="text-center mx-2"> <!-- Center the content horizontally -->
@@ -150,18 +138,30 @@
                     </thead>
                     <tbody class="tBody">
                         <% if (walletInfo && walletInfo.transactions) { %>
-                            <% walletInfo.transactions.forEach((transaction, index) => { %>
+                            <% walletInfo.transactions.forEach((transaction, index)=> { %>
                                 <tr>
-                                    <td><%= index + 1 %></td>
-                                    <td class="text-success"><%= new Date(transaction.date).toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) %></td>
-                                    <td class="text-danger"><%= transaction.amount %></td>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td class="text-success">
+                                        <%= new Date(transaction.date).toLocaleString('en-US', { day: 'numeric' ,
+                                            month: 'short' , year: 'numeric' , hour: '2-digit' , minute: '2-digit' ,
+                                            hour12: true }) %>
+                                    </td>
+                                    <% if( transaction.amount<0 ){ %>
+                                        <td class="text-danger"><b>
+                                                <%= transaction.amount %>
+                                            </b></td>
+                                        <% } else {%>
+                                            <td class="text-success"><b>+<%= transaction.amount %></b></td>
+                                            <% } %>
                                 </tr>
-                            <% }); %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="3">No transactions found</td>
-                            </tr>
-                        <% } %>
+                                <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3">No transactions found</td>
+                                        </tr>
+                                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -173,54 +173,54 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-      
+
     <%-include('include/footer')-%>
-<script>
-    document.getElementById('addMoney').addEventListener('click', function(event) {
-        event.preventDefault()
-        $.ajax({           
-          url: '/addWalletMoney',
-          data: $('#walletAddForm').serialize(),
-          type: "POST"
-        })
-        .then(res => {
-            if(res.err){
-                return location.href = res.url;
-            }
-        
-            if(res.success ==true){
-            const options = {
-              "key": res.key_id,
-              "amount": res.wallet.amount,
-              "currency": "INR",
-              "name": "R&R Wares",
-              "description": "Test Transaction",
-              "order_id": res.wallet.id, //This is a sample Order ID. Pass the id obtained in the response of Step 1
-              "callback_url": "/addWalletPaymentSuccessfull", //after sucessful payment
-              "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                  "name": "Richin Rajeev", 
-                  "email": "richinrajeev@gmail.com",
-                  "contact": "9876543210" //Provide the customer's phone number for better conversion rates 
-              },
-              "notes": {
-                  "address": "Razorpay Corporate Office"
-              },
-              "theme": {
-                  "color": "#3399cc"
-              }
-            };
-        
-            const rzp1 = new Razorpay(options);
-        
-            rzp1.open();
-          }
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        //   document.getElementById('confirmation-popup').style.display = 'none';
-      });
-</script>
+        <script>
+            document.getElementById('addMoney').addEventListener('click', function (event) {
+                event.preventDefault()
+                $.ajax({
+                    url: '/addWalletMoney',
+                    data: $('#walletAddForm').serialize(),
+                    type: "POST"
+                })
+                    .then(res => {
+                        if (res.err) {
+                            return location.href = res.url;
+                        }
+
+                        if (res.success == true) {
+                            const options = {
+                                "key": res.key_id,
+                                "amount": res.wallet.amount,
+                                "currency": "INR",
+                                "name": "R&R Wares",
+                                "description": "Test Transaction",
+                                "order_id": res.wallet.id, //This is a sample Order ID. Pass the id obtained in the response of Step 1
+                                "callback_url": "/addWalletPaymentSuccessfull", //after sucessful payment
+                                "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                                    "name": "Richin Rajeev",
+                                    "email": "richinrajeev@gmail.com",
+                                    "contact": "9876543210" //Provide the customer's phone number for better conversion rates 
+                                },
+                                "notes": {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                "theme": {
+                                    "color": "#3399cc"
+                                }
+                            };
+
+                            const rzp1 = new Razorpay(options);
+
+                            rzp1.open();
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                //   document.getElementById('confirmation-popup').style.display = 'none';
+            });
+        </script>
 </body>
 
 </html>

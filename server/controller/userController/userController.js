@@ -13,7 +13,7 @@ const Productdb = require('../../model/adminModel/productModel');
 const { query } = require('express');
 const userAddressdb = require('../../model/userModel/addressModel')
 const Orderdb = require('../../model/userModel/orderModel')
-const walletDb=require('../../model/userModel/walletModel')
+const walletDb = require('../../model/userModel/walletModel')
 const userDbHelpers = require("../../dbHelpers/userDbHelpers");
 const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
@@ -478,7 +478,7 @@ exports.userEditProfile = async (req, res) => {
         { $set: User }
       );
     }
-    res.status(200).redirect("/userProfile");
+    res.status(200).redirect("/userProfile"); 
   } catch (err) {
     console.log(err);
   }
@@ -487,8 +487,7 @@ exports.userEditProfile = async (req, res) => {
 
 exports.userCheckout = async (req, res) => {
   try {
-    const appliedCouponCode=req.session.appliedCouponCode
-    console.log('incontroller',appliedCouponCode)
+    const appliedCouponCode = req.session.appliedCouponCode
     const address = await userDbHelpers.getDefaultAddress(req.session.isUserAuth, req.body.defaultAddress)
     const walletInfo = await userDbHelpers.getWallet(req.session.isUserAuth);
     const valueAddress = address[0].address.structuredAddress
@@ -506,7 +505,7 @@ exports.userCheckout = async (req, res) => {
 
     // Create an order record in the Orderdb mode
     const orderItems = cartProducts.map((element) => {
-      return {
+      const order = {
         productId: element.products.productId,
         pName: element.pDetail[0].pName,
         brand: element.pDetail[0].brand,
@@ -516,7 +515,15 @@ exports.userCheckout = async (req, res) => {
         units: element.products.units,
         images: element.pDetail[0].images[0],
       }
+      if (req.session.appliedCouponCode) {
+        const totalUnitPrice = order.price * order.units
+        const afterDiscountPrice = Math.round(totalUnitPrice - ((totalUnitPrice * req.session.couponDiscount) / 100))
+        order.priceAfterCoupon = afterDiscountPrice
+        order.couponCode = req.session.appliedCouponCode
+      }
+      return order
     })
+
     const orderRandomId = `ORDER${uuidv4().slice(0, 18)}`;
 
     orderItems.forEach(async (element) => {
@@ -532,13 +539,15 @@ exports.userCheckout = async (req, res) => {
       totalPrice: total,
       orderRandomId: orderRandomId,
       address: valueAddress,
-      "orderItems.couponUsed":appliedCouponCode,
       paymentMethod:
-        req.body.paymentMethod === "cod" ? "cod" 
-        : req.body.paymentMethod === "online"
-        ? "online"
-        : "wallet" ?? "wallet",
+        req.body.paymentMethod === "cod" ? "cod"
+          : req.body.paymentMethod === "online"
+            ? "online"
+            : "wallet" ?? "wallet",
     });
+    delete req.session.appliedCouponCode
+    delete req.session.totalPrice
+    delete req.session.couponDiscount
 
     // if cash on delivery
     if (req.body.paymentMethod === "cod") {
@@ -557,27 +566,34 @@ exports.userCheckout = async (req, res) => {
     //if wallet payment
     if (req.body.paymentMethod === "wallet") {
       if (walletInfo && walletInfo.balance >= total) {
-      await newOrder.save();
-      await Cartdb.updateOne(
-        { userId: req.session.isUserAuth },
-        { $set: { products: [] } }
-      ); // empty cart items
-      await walletDb.updateOne(
-        { userId: req.session.isUserAuth },
-        { $inc: { balance : -(total)} },
-        { upsert: true }
-      );
-      req.session.orderSucessPage = true;
-      return res.json({
-        status: "success",
-        paymentMethod: "wallet",
-        url: "/orderSuccess",
-      });
-    }else {
-      req.session.walletErrorMessage = 'Insufficient balance in wallet';
-      return res.redirect('/userCheckout'); // Redirect to checkout page to display the error message
-  }
-  }
+        await newOrder.save();
+        await Cartdb.updateOne(
+          { userId: req.session.isUserAuth },
+          { $set: { products: [] } }
+        ); // empty cart items
+        await walletDb.updateOne(
+          { userId: req.session.isUserAuth },
+          {
+            $inc: { balance: -(total) },
+            $push: {
+              transactions: {
+                amount: -(total)
+              }
+            }
+          },
+          { upsert: true }
+        );
+        req.session.orderSucessPage = true;
+        return res.json({
+          status: "success",
+          paymentMethod: "wallet",
+          url: "/orderSuccess",
+        });
+      } else {
+        req.session.walletErrorMessage = 'Insufficient balance in wallet';
+        return res.redirect('/userCheckout'); // Redirect to checkout page to display the error message
+      }
+    }
     //if online payment
     if (req.body.paymentMethod === "online") {
       const options = {

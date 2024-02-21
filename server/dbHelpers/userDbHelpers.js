@@ -23,13 +23,70 @@ exports.search = async (search) => {
   }
 }
 
-exports.getProductByCategory = async (category, page) => {
+exports.getProductByCategory = async (category, page, search=null) => {
   try {
-    const limit = 1;
+    const limit = 2;
     const skip = (page - 1) * limit;
     const totalListedProducts = await Productdb.find({ category: category, listed: true }).countDocuments();
     const totalPages = Math.ceil(totalListedProducts / limit);
-    const result = await Productdb.find({ category: category, listed: true }).skip(skip).limit(limit);
+    const agg = [
+      {
+        $match: {
+          category: category,
+          listed: true,
+        },
+      },
+      {
+        $skip: skip
+      },
+      {
+        $limit: limit
+      },
+    ];
+     // if there is both min and max for product price
+     if(Number(search?.minPrice) && Number(search?.maxPrice)) {
+      agg.splice(1,0, {
+        $match: {
+          $and: [
+            {
+              price: {$gte: Number(search?.minPrice)}
+            },
+            {
+              price:{$lte: Number(search?.maxPrice)}
+            }
+          ]
+        },
+      });
+    }
+
+    //if there is only max for filter
+    if(!Number(search?.minPrice) && Number(search?.maxPrice)) {
+      agg.splice(1,0, {
+        $match: {
+          price: {$lt: Number(search?.maxPrice)}
+        },
+      });
+    }
+
+    //if there is only min for filter
+    if(Number(search?.minPrice) && !Number(search?.maxPrice)) {
+      agg.splice(1,0, {
+        $match: {
+          price: {$gt: Number(search?.minPrice)}
+        },
+      });
+    }
+
+    //Price Sort
+    if(Number(search?.sort)){
+      agg.splice(1,0, {
+        $sort: {
+          price: Number(search?.sort)
+        },
+      });
+    }
+
+    const result = await Productdb.aggregate(agg);
     return { result, totalPages };
   } catch (err) {
     console.log("Error:", err);
@@ -147,7 +204,7 @@ exports.getOrderDetails = async (orderId, productId) => {
   }
 }
 
-exports.userCancelOrder = async (orderId, productId) => {
+exports.userCancelOrder = async (orderId, productId, userId) => {
   try {
     const order = await Orderdb.findOneAndUpdate({
       $and: [{ _id: orderId }, { 'orderItems.productId': productId }]
@@ -163,6 +220,12 @@ exports.userCancelOrder = async (orderId, productId) => {
         return value.units;
       }
     })
+
+    let cancelPrice = units.price * units.units
+    if (units.priceAfterCoupon > 0) {
+      cancelPrice = units.priceAfterCoupon
+    }
+
     await Productdb.updateOne({ _id: productId },
       {
         $inc: {
@@ -170,81 +233,138 @@ exports.userCancelOrder = async (orderId, productId) => {
         }
       });
 
+    if (order.paymentMethod != 'cod') {
+      await walletDb.updateOne({ userId: userId },
+        {
+          $inc: {
+            balance: cancelPrice
+          },
+          $push: {
+            transactions: {
+              amount: cancelPrice
+            }
+          }
+        },
+        {
+          upsert: true
+        }
+      )
+    }
     return;
   } catch (err) {
-    console.log(err);
+    console.error('Error cancelling order:', err);
+    res.status(500).send('Internal server error');
   }
 }
 
 //Return order
-
-    exports.returnOrder = async (orderId) => {
-        try {
-            // Retrieve the order
-            const order = await Orderdb.findOne({ _id: orderId });
-            if (!order) {
-                throw new Error('Order not found');
-            }
-    
-            // Calculate refund amount
-            let refundAmount = order.totalPrice;
-    
-            // If coupon was applied, adjust the refund amount
-            // For simplicity, let's assume a fixed coupon amount deducted from totalPrice
-            // You may need to adjust this logic based on your coupon system
-            // For example, if the coupon value is stored in the order document
-            // you should deduct that value from the totalPrice.
-            // refundAmount -= order.couponAmount;
-    
-            // Credit refund amount to user's wallet
-            const userId = order.userId;
-            const wallet = await Wallet.findOne({ userId });
-            if (!wallet) {
-                throw new Error('Wallet not found for user');
-            }
-    
-            wallet.balance += refundAmount;
-            wallet.transactions.push({ amount: refundAmount });
-    
-            await wallet.save();
-    
-            // Increase product quantity
-            for (const item of order.orderItems) {
-                await Productdb.updateOne(
-                    { _id: item.productId },
-                    { $inc: { units: item.units } }
-                );
-            }
-    
-            // Update order status to "Returned"
-            await Orderdb.updateOne(
-                { _id: orderId },
-                { $set: { 'orderItems.$[].orderStatus': 'Returned' } }
-            );
-    
-            return true; // Return success
-        } catch (error) {
-            console.error('Error returning order:', error);
-            throw error; 
+exports.userReturnOrder = async (orderId, productId, userId) => {
+  try {
+    const order = await Orderdb.findOneAndUpdate({
+      $and: [{ _id: orderId }, { 'orderItems.productId': productId }]
+    },
+      {
+        $set: {
+          "orderItems.$.orderStatus": "Cancelled"
         }
-    };
-    
+      }
+    )
+    const units = order.orderItems.find(value => {
+      if (String(value.productId) === productId) {
+        return value.units;
+      }
+    })
+
+    let cancelPrice = units.price * units.units
+    if (units.priceAfterCoupon > 0) {
+      cancelPrice = units.priceAfterCoupon
+    }
+
+    await Productdb.updateOne({ _id: productId },
+      {
+        $inc: {
+          units: units.units
+        }
+      });
+
+    await walletDb.updateOne({ userId: userId },
+      {
+        $inc: {
+          balance: cancelPrice
+        },
+        $push: {
+          transactions: {
+            amount: cancelPrice
+          }
+        }
+      },
+      {
+        upsert: true
+      }
+    )
+    return;
+  } catch (err) {
+    console.error('Error returning order:', err);
+    res.status(500).send('Internal server error');
+  }
+}
+
+// exports.returnOrder = async (orderId) => {
+//   try {
+//     // Retrieve the order
+//     const order = await Orderdb.findOne({ _id: orderId });
+//     if (!order) {
+//       throw new Error('Order not found');
+//     }
+
+//     // Calculate refund amount
+//     let refundAmount = order.totalPrice;
+
+//     // If coupon was applied, adjust the refund amount
+//     // For simplicity, let's assume a fixed coupon amount deducted from totalPrice
+//     // You may need to adjust this logic based on your coupon system
+//     // For example, if the coupon value is stored in the order document
+//     // you should deduct that value from the totalPrice.
+//     // refundAmount -= order.couponAmount;
+
+//     // Credit refund amount to user's wallet
+//     const userId = order.userId;
+//     const wallet = await Wallet.findOne({ userId });
+//     if (!wallet) {
+//       throw new Error('Wallet not found for user');
+//     }
+
+//     wallet.balance += refundAmount;
+//     wallet.transactions.push({ amount: refundAmount });
+
+//     await wallet.save();
+
+//     // Increase product quantity
+//     for (const item of order.orderItems) {
+//       await Productdb.updateOne(
+//         { _id: item.productId },
+//         { $inc: { units: item.units } }
+//       );
+//     }
+
+//     // Update order status to "Returned"
+//     await Orderdb.updateOne(
+//       { _id: orderId },
+//       { $set: { 'orderItems.$[].orderStatus': 'Returned' } }
+//     );
+
+//     return true; // Return success
+//   } catch (error) {
+//     console.error('Error returning order:', error);
+//     throw error;
+//   }
+// };
+
 //To get wallet information
+
 exports.getWallet = async (userId) => {
   try {
-    // const agg = [
-    //   {
-    //     $match: {
-    //       userId: new mongoose.Types.ObjectId(userId),
-    //     },
-    //   },
-    //   {
-    //     $unwind: "$transactions"
-    //   }    
-    // ];
-    // return await walletDb.aggregate(agg);
     return await walletDb.findOne({ userId: userId }).exec();
-
   } catch (err) {
     console.log(err);
   }
