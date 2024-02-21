@@ -1,7 +1,7 @@
 const Userdb = require('../model/userModel/userModel');
 const Otpdb = require("../model/userModel/otpModel");
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const { default: mongoose } = require("mongoose");
