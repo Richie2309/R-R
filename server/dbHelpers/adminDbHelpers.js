@@ -39,8 +39,8 @@ exports.topProducts = async () => {
             }
         ];
         return await Orderdb.aggregate(agg);
-    } catch (error) {
-        console.log("Error in getAllOrders:", error);
+    } catch (err) {
+       throw err
     }
 }
 
@@ -76,8 +76,8 @@ exports.topBrands = async () => {
             }
         ];
         return await Orderdb.aggregate(agg);
-    } catch (error) {
-        throw error;
+    } catch (err) {
+        throw err;
     }
 }
 
@@ -113,8 +113,8 @@ exports.topCategories = async () => {
             }
         ];
         return await Orderdb.aggregate(agg);
-    } catch (error) {
-        throw error;
+    } catch (err) {
+        throw err;
     }
 }
 
@@ -185,7 +185,7 @@ exports.dashDetails = async () => {
         return { profit: totalSales?.profit }
 
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -198,7 +198,7 @@ exports.adminChangeOrderStatus = async (orderId, productId, orderStatus) => {
         }
         return await Orderdb.updateOne({ $and: [{ _id: new mongoose.Types.ObjectId(orderId) }, { "orderItems.productId": productId }] }, { $set: { "orderItems.$.orderStatus": orderStatus } });
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -207,7 +207,7 @@ exports.getAllCoupon = async () => {
     try {
         return await couponDb.find();
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -216,7 +216,7 @@ exports.adminDeleteCoupon = async (couponId) => {
     try {
         return await couponDb.deleteOne({ _id: couponId });
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -246,7 +246,7 @@ exports.productSearchResult = async (searchQuery) => {
 
         return searchResults;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 //To get count of all listing in the admin side
@@ -276,7 +276,6 @@ exports.productSearchResult = async (searchQuery) => {
 //             return await couponDb.countDocuments();
 //         }
 //     } catch (err) {
-//         console.log(err);
 //     }
 // }
 

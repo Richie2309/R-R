@@ -38,7 +38,7 @@ exports.usersAddToCart = async (req, res) => {
   
   
     } catch (err) {
-      res.status(500).send("Internal server error addtocart")
+      res.status(500).render('errorPages/500page')
     }
   }
   
@@ -58,8 +58,7 @@ exports.usersAddToCart = async (req, res) => {
         res.send(false);
       }
     } catch (err) {
-      console.log("err");
-      res.status(500).send("Interal server error getcart")
+      res.status(500).render('errorPages/500page')
     }
   }
   
@@ -73,7 +72,7 @@ exports.usersAddToCart = async (req, res) => {
         status: true
       })
     } catch (err) {
-      res.status(500).send("Internal server error update")
+      res.status(500).render('errorPages/500page')
     }
   }
   
@@ -85,7 +84,8 @@ exports.usersAddToCart = async (req, res) => {
       )
       res.status(200).redirect('/userCart')
     } catch (err) {
-  
+      res.status(500).render('errorPages/500page')
+
     }
   }
   

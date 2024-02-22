@@ -25,28 +25,33 @@ exports.adminLogout = (req, res) => {
 };
 
 exports.adminSignin = (req, res) => {
-  if (!req.body.email) {
-    req.session.adminEmail = `This Field is required`
+  try {
+    if (!req.body.email) {
+      req.session.adminEmail = `This Field is required`
+    }
+
+    if (!req.body.password) {
+      req.session.adminPassword = `This Field is required`
+    }
+
+    if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
+      req.session.adminEmail = `Not a valid Gmail address`
+    }
+
+    if (req.session.adminEmail || req.session.adminPassword) {
+      return res.status(401).redirect('/adminSignin');
+    }
+    if (req.body.password === adminPassword && req.body.email === adminEmail) {
+      req.session.isAdminAuth = true;
+      res.status(200).redirect("/adminHome"); //Login Sucessfull
+    } else {
+      req.session.invalidAdmin = `Invalid credentials!`;
+      res.status(401).redirect("/adminSignin"); //Wrong Password or email
+    }
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
   }
 
-  if (!req.body.password) {
-    req.session.adminPassword = `This Field is required`
-  }
-
-  if (req.body.email && !/^[A-Za-z0-9]+@gmail\.com$/.test(req.body.email)) {
-    req.session.adminEmail = `Not a valid Gmail address`
-  }
-
-  if (req.session.adminEmail || req.session.adminPassword) {
-    return res.status(401).redirect('/adminSignin');
-  }
-  if (req.body.password === adminPassword && req.body.email === adminEmail) {
-    req.session.isAdminAuth = true;
-    res.status(200).redirect("/adminHome"); //Login Sucessfull
-  } else {
-    req.session.invalidAdmin = `Invalid credentials!`;
-    res.status(401).redirect("/adminSignin"); //Wrong Password or email
-  }
 }
 
 //Dashboard
@@ -172,8 +177,7 @@ exports.getDetailsChart = async (req, res) => {
       salesCount,
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -243,7 +247,6 @@ exports.downloadSalesReport = async (req, res, next) => {
     res.send(csvData);
 
   } catch (error) {
-    console.log(error);
     next(error)
   }
 }
@@ -254,16 +257,19 @@ exports.getAllUser = async (req, res) => {
     const result = await Userdb.find();
     res.send(result);
   } catch (err) {
-    console.log(err);
-    res.status(401).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
 exports.adminUserStatus = async (req, res) => {
-  if (!Number(req.params.block)) {
-    await Userdb.updateOne({ _id: req.params.id }, { $set: { userStatus: false, userLstatus: false } });
-    return res.status(200).redirect('/adminUserManage');
+  try {
+    if (!Number(req.params.block)) {
+      await Userdb.updateOne({ _id: req.params.id }, { $set: { userStatus: false, userLstatus: false } });
+      return res.status(200).redirect('/adminUserManage');
+    }
+    await Userdb.updateOne({ _id: req.params.id }, { $set: { userStatus: true } });
+    res.status(200).redirect('/adminUserManage');
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
   }
-  await Userdb.updateOne({ _id: req.params.id }, { $set: { userStatus: true } });
-  res.status(200).redirect('/adminUserManage');
 }

@@ -28,8 +28,7 @@ exports.addWalletMoney = async (req, res) => {
             wallet: wallet
         })
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Internal server error Wallet");
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -51,12 +50,11 @@ exports.addWalletPaymentSuccessfull = async (req, res) => {
                         }
                     }
                 })
-            res.status(200).redirect('/orderSuccess')
+            res.status(200).redirect('/userWallet')
         } else {
             return res.send("Payment Failed");
         }
     } catch (err) {
-        console.error("order razorpay err", err);
-        res.status(500).send('Internal server error')
+        res.status(500).render('errorPages/500page')
     }
 }

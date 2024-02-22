@@ -15,8 +15,7 @@ exports.adminChangeOrderStatus = async (req, res) => {
     await adminHelper.adminChangeOrderStatus(req.query.orderId, req.query.productId, req.body.orderStatus)
     res.status(200).redirect(`/adminOrderManage`);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server err");
+    res.status(500).render('errorPages/500page')
   }
 
 }
@@ -27,7 +26,7 @@ exports.userCancelOrder = async (req, res) => {
     req.session.isCancelled = true;
     return res.status(200).redirect("/userOrderHistory");
   } catch (err) {
-    console.log(err)
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -37,7 +36,7 @@ exports.userReturnOrder = async (req, res) => {
     req.session.isReturned = true;
     return res.status(200).redirect("/userOrderHistory");
   } catch (err) {
-    res.status(500).send("Internal server error")
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -66,6 +65,6 @@ exports.invoice = async (req, res) => {
       }
     );
   } catch (error) {
-    res.send(error)
+    res.status(500).render('errorPages/500page')
   }
 }

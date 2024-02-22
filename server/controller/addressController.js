@@ -37,8 +37,7 @@ exports.addressInfo = async (req, res) => {
     }
 
   } catch (err) {
-    console.log(err);
-    res.status(500).send("internal server error");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -50,19 +49,24 @@ exports.changeAddress = async (req, res) => {
     );
     res.status(200).redirect("/userAddress");
   } catch (err) {
-    res.status(500).send("Internal server error");
+    res.status(500).render('errorPages/500page')
   }
 }
 
 exports.userAddAddress = async (req, res) => {
   const returnTo = req.session.returnTo;
   try {
+    req.body.fName = req.body.fName.trim()
+    req.body.locality = req.body.locality.trim()
+    req.body.address = req.body.address.trim()
+    req.body.district = req.body.district.trim()
+    req.body.state = req.body.state.trim()
     if (!req.body.fName) {
-      req.session.fName = `This Field is required`;
+      req.session.fName = `Your name is required`;
     }
 
-    if (!req.body.pincode) {
-      req.session.pincode = `This Field is required`;
+    if (!req.body.pincode || !/^\d{6}$/.test(pincode)) {
+      req.session.pincode = `Enter 6 digits pincode`;
     }
 
     if (!req.body.locality) {
@@ -151,7 +155,7 @@ exports.userAddAddress = async (req, res) => {
     }
     // res.redirect('/userAddress')
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -248,8 +252,7 @@ exports.userEditAddress = async (req, res) => {
     }
     // res.status(200).redirect("/userAddress");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -275,7 +278,6 @@ exports.deleteAddress = async (req, res) => {
     }
     res.status(200).redirect("/userAddress");
   } catch (err) {
-    console.log("err");
-    res.status(500).send(err);
+    res.status(500).render('errorPages/500page')
   }
 }

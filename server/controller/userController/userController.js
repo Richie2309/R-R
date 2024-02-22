@@ -100,7 +100,7 @@ const sendOtpMail = async (req, res, getRoute) => {
     res.status(200).redirect(getRoute);
     await transporter.sendMail(message);
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 };
 
@@ -129,8 +129,7 @@ const userOtpVerify = async (req, res, getRoute) => {
 
     return true;
   } catch (err) {
-    console.log("Function error", err);
-    res.status(500).send("Error while quering data err:");
+    res.status(500).render('errorPages/500page')
   }
 };
 
@@ -160,8 +159,7 @@ exports.userSignupEmailVerify = async (req, res) => {
 
     await sendOtpMail(req, res, "/userSignupOtpVerify"); // send otp as mail
   } catch (err) {
-    console.log("Error querying the database:", err);
-    res.status(500).send("Internal server error");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -183,8 +181,7 @@ exports.userSignupOtpVerify = async (req, res) => {
       res.status(200).redirect("/userSignup");
     }
   } catch (err) {
-    console.log("Internal delete error", err);
-    res.status(500).send("Error while quering data err:");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -196,7 +193,7 @@ exports.userSignupEmailVerifyResend = async (req, res) => {
     delete req.session.err;
     delete req.session.rTime;
   } catch (err) {
-    console.log("Resend Mail err:", err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -242,9 +239,8 @@ exports.userSignup = async (req, res) => {
       delete req.session.verifySignupPage;
       res.status(401).redirect("/userSigninEmail");
     } catch (err) {
-      console.log(err);
       req.session.userRegister = userInfo;
-      res.status(401).redirect("/userSignup");
+      res.status(500).render('errorPages/500page')
     }
   }
 }
@@ -265,7 +261,10 @@ exports.userSigninEmail = async (req, res) => {
     }
 
     const data = await Userdb.findOne({ email: req.body.email });
-
+    if (!data) {
+      req.session.noUser = `Email not found`;
+      return res.status(401).redirect("/userSigninEmail"); 
+    }
     if (data) {
       if (bcrypt.compareSync(req.body.password, data.password)) {
         if (!data.userStatus) {
@@ -340,7 +339,7 @@ exports.userEnterOtp = async (req, res) => {
       res.status(200).redirect("/userResetPassword");
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -352,7 +351,7 @@ exports.userForgotPassOtpResend = async (req, res) => {
     delete req.session.err;
     delete req.session.rTime;
   } catch (err) {
-    console.log("Resend Mail err:", err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -389,8 +388,7 @@ exports.userResetPassword = async (req, res) => {
 
 
   } catch (err) {
-    console.log(err);
-    res.status(500).send('Internal Server Error');
+    res.status(500).render('errorPages/500page')
   }
 
 }
@@ -413,7 +411,7 @@ exports.userInfo = async (req, res) => {
     const result = await Userdb.findOne({ _id: userId })
     res.send(result)
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -480,10 +478,9 @@ exports.userEditProfile = async (req, res) => {
     }
     res.status(200).redirect("/userProfile"); 
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
-
 
 exports.userCheckout = async (req, res) => {
   try {
@@ -613,8 +610,7 @@ exports.userCheckout = async (req, res) => {
     }
 
   } catch (err) {
-    console.error(err);
-    res.send(err)
+    res.status(500).render('errorPages/500page')
   }
 };
 
@@ -639,7 +635,6 @@ exports.onlinePaymentSuccessfull = async (req, res) => {
       return res.send("Order Failed");
     }
   } catch (err) {
-    console.error("order razorpay err", err);
-    res.status(500).send('Internal server error')
+    res.status(500).render('errorPages/500page')
   }
 }

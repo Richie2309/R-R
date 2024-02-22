@@ -50,5 +50,8 @@ app.use((req, res, next) => {
 
 app.use('/', userRoutes);
 app.use('/', adminRoutes);
+app.get("*",function(req,res){
+    res.status(404).render("errorPages/404page")
+})
 
 app.listen(PORT, () => { console.log(`Server is running on http://localhost:${PORT}`) })

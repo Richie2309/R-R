@@ -3,12 +3,15 @@ const Productdb = require('../../model/adminModel/productModel');
 const userDbHelper = require('../../dbHelpers/userDbHelpers')
 
 exports.homepage = async (req, res) => {
-    const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-    const recentProducts=await userDbHelper.recentProducts()
-    console.log(recentProducts);
-    const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
-    delete req.session.orderSucessPage
-    res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts: cartProducts, recentProducts });
+    try {
+        const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
+        const recentProducts = await userDbHelper.recentProducts()
+        const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/1`);
+        delete req.session.orderSucessPage
+        res.render('userViews/homepage', { isLoggedIn: req.session.isUserAuth, category: category.data, cartProducts: cartProducts, recentProducts });
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.singleProductCategory = async (req, res) => {
@@ -17,11 +20,11 @@ exports.singleProductCategory = async (req, res) => {
         const name = req.query.name || "";
         const currentPage = parseInt(req.query.page) || 1;
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
-        const { result: products, totalPages } = await userDbHelper.getProductByCategory(name, currentPage, req.query); 
+        const { result: products, totalPages } = await userDbHelper.getProductByCategory(name, currentPage, req.query);
         res.render('userViews/singleProductCategory', { isLoggedIn: req.session.isUserAuth, product: products, selectedCategory: name, cartProducts: cartProducts, currentPage: currentPage, totalPages: totalPages });
     }
     catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -38,96 +41,123 @@ exports.userProductDetail = async (req, res) => {
 
         res.render('userViews/userProductDetail', { isLoggedIn: req.session.isUserAuth, product: product.data[0], isCartItem: isCartItem.data, cartProducts: cartProducts })
     } catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
 exports.userSignupEmailVerify = async (req, res) => {
-    res.render('userViews/userSignupEmail', { isUser: req.session.isUser }, (err, html) => {
-        if (err) {
-            console.log(err);
-        }
-        delete req.session.isUser
-        res.send(html)
-    })
+    try {
+        res.render('userViews/userSignupEmail', { isUser: req.session.isUser }, (err, html) => {
+            if (err) {
+                console.log(err);
+            }
+            delete req.session.isUser
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userSignupOtpVerify = async (req, res) => {
-
-    res.render('userViews/userSignupOtpVerify', { email: req.session.verifyEmail, errorMesg: req.session.err, rTime: req.session.rTime }, (err, html) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Internal Error');
-        }
-        delete req.session.err;
-        delete req.session.rTime;
-        res.send(html)
-    })
+    try {
+        res.render('userViews/userSignupOtpVerify', { email: req.session.verifyEmail, errorMesg: req.session.err, rTime: req.session.rTime }, (err, html) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Internal Error');
+            }
+            delete req.session.err;
+            delete req.session.rTime;
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 
 exports.userSignup = (req, res) => {
-    const signinfo = { name: req.session.fName, pass: req.session.pass, conPass: req.session.conPass, bothPass: req.session.bothPass }
-    res.status(200).render('userViews/userSignup', { signinfo: signinfo }, (err, html) => {
-        if (err) {
-            console.log(err);
-        }
-        delete req.session.fName;
-        delete req.session.pass;
-        delete req.session.conPass;
-        delete req.session.bothPass;
-        res.send(html)
-    });
+    try {
+        const signinfo = { name: req.session.fName, pass: req.session.pass, conPass: req.session.conPass, bothPass: req.session.bothPass }
+        res.status(200).render('userViews/userSignup', { signinfo: signinfo }, (err, html) => {
+            if (err) {
+                console.log(err);
+            }
+            delete req.session.fName;
+            delete req.session.pass;
+            delete req.session.conPass;
+            delete req.session.bothPass;
+            res.send(html)
+        });
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userSigninEmail = (req, res) => {
-    const signinfo = { email: req.session.email, pass: req.session.pass, noUser: req.session.noUser, wrongPass: req.session.wrongPass, isBlock: req.session.userBlockedMesg }
-    res.render('userViews/userSigninEmail', { signinfo: signinfo }, (err, html) => {
-        if (err) {
-            console.log(err);
-        }
-        delete req.session.email;
-        delete req.session.pass;
-        delete req.session.noUser;
-        delete req.session.wrongPass;
-        delete req.session.userBlockedMesg;
-        res.send(html)
-    })
+    try {
+        const signinfo = { email: req.session.email, pass: req.session.pass, noUser: req.session.noUser, wrongPass: req.session.wrongPass, isBlock: req.session.userBlockedMesg }
+        res.render('userViews/userSigninEmail', { signinfo: signinfo }, (err, html) => {
+            if (err) {
+                console.log(err);
+            }
+            delete req.session.email;
+            delete req.session.pass;
+            delete req.session.noUser;
+            delete req.session.wrongPass;
+            delete req.session.userBlockedMesg;
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userForgotPass = async (req, res) => {
-    res.render('userViews/userForgotPass', { isUser: req.session.isUser }, (err, html) => {
-        if (err) {
-            console.log(err);
-        }
-        delete req.session.isUser;
-        res.send(html)
-    })
+    try {
+        res.render('userViews/userForgotPass', { isUser: req.session.isUser }, (err, html) => {
+            if (err) {
+                console.log(err);
+            }
+            delete req.session.isUser;
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userEnterOtp = (req, res) => {
-    res.render('userViews/userEnterOtp', { email: req.session.verifyEmail, errorMesg: req.session.err, rTime: req.session.rTime }, (err, html) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Internal Error');
-        }
-        delete req.session.err;
-        delete req.session.rTime;
-        res.send(html)
-    })
+    try {
+        res.render('userViews/userEnterOtp', { email: req.session.verifyEmail, errorMesg: req.session.err, rTime: req.session.rTime }, (err, html) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Internal Error');
+            }
+            delete req.session.err;
+            delete req.session.rTime;
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userResetPassword = (req, res) => {
-    res.render('userViews/userResetPassword', { pass: req.session.pass, conPass: req.session.conPass, bothPass: req.session.bothPass }, (err, html) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Internal Error');
-        }
-        delete req.session.pass;
-        delete req.session.conPass;
-        delete req.session.bothPass;
-        res.send(html)
-    })
+    try {
+        res.render('userViews/userResetPassword', { pass: req.session.pass, conPass: req.session.conPass, bothPass: req.session.bothPass }, (err, html) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Internal Error');
+            }
+            delete req.session.pass;
+            delete req.session.conPass;
+            delete req.session.bothPass;
+            res.send(html)
+        })
+    } catch (err) {
+        res.status(500).render('errorPages/500page')
+    }
 }
 
 exports.userProfile = async (req, res) => {
@@ -137,7 +167,7 @@ exports.userProfile = async (req, res) => {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getUserInfo?userId=${userId}`)
         res.render('userViews/userProfile', { user: user.data, cartProducts: cartProducts })
     } catch (err) {
-        console.log(err)
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -168,7 +198,7 @@ exports.userEditProfile = async (req, res) => {
             }
         )
     } catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -179,8 +209,7 @@ exports.userAddress = async (req, res) => {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`)
         res.status(200).render('userViews/userAddress', { userInfo: user.data, cartProducts: cartProducts })
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -218,7 +247,7 @@ exports.userAddAddress = async (req, res) => {
             }
         )
     } catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -260,11 +289,9 @@ exports.userEditAddress = async (req, res) => {
                 delete req.session.sAddress;
 
                 res.send(html);
-            }
-        )
-
+            })
     } catch (err) {
-        console.log("Update query err:", err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -278,8 +305,7 @@ exports.userCart = async (req, res) => {
             res.status(200).render('userViews/userCart', { cartProducts: [] });
         }
     } catch (err) {
-        console.log(err);
-        res.status(500).send("Internal server error usercart")
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -302,7 +328,7 @@ exports.userCheckout = async (req, res) => {
         if (walletInfo && walletInfo.balance >= total) {
             walletSuccessMessage = 'You can order with wallet money';
         }
-        
+
 
         if (cartProducts.length > 0 && cartProducts[0].pDetail && cartProducts[0].pDetail[0]) {
             res.status(200).render('userViews/userCheckout', {
@@ -326,8 +352,7 @@ exports.userCheckout = async (req, res) => {
             res.status(200).render('userViews/userCheckout', { cartProducts: [] });
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).send("Internal catch server error");
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -342,8 +367,7 @@ exports.orderSuccess = async (req, res) => {
             res.send(html);
         })
     } catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -353,17 +377,16 @@ exports.userOrderHistory = async (req, res) => {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
         delete req.session.orderSucessPage
         const orderItems = await userDbHelper.getOrders(req.session.isUserAuth);
-        res.status(200).render('userViews/userOrderHistory',{ orders: orderItems, isReturned:req.session.isReturned, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
-            if(err){
-                console.error('order history err', err);
+        res.status(200).render('userViews/userOrderHistory', { orders: orderItems, isReturned: req.session.isReturned, isCancelled: req.session.isCancelled, cartProducts: cartProducts }, (err, html) => {
+            if (err) {
                 return res.status(500).send('Internal server err');
             }
             delete req.session.isCancelled;
             delete req.session.isReturned;
-            return res.status(200).send(html); 
+            return res.status(200).send(html);
         });
     } catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -371,10 +394,10 @@ exports.userOrderHistory = async (req, res) => {
 exports.userOrderDetail = async (req, res) => {
     try {
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth)
-        const orderDetail = await userDbHelper.getOrderDetails(req.query.orderId,req.query.productId)
+        const orderDetail = await userDbHelper.getOrderDetails(req.query.orderId, req.query.productId)
         res.status(200).render('userViews/userOrderDetail', { cartProducts: cartProducts, orderDetail })
     } catch (err) {
-        console.log(err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -385,6 +408,6 @@ exports.userWallet = async (req, res) => {
         const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
         res.render('userViews/userWallet', { walletInfo, cartProducts });
     } catch (err) {
-        console.log(err);
+      res.status(500).render('errorPages/500page')
     }
 }

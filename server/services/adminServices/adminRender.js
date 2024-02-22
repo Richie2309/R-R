@@ -3,7 +3,7 @@ const { response } = require('express');
 const Productdb = require('../../model/adminModel/productModel');
 const { ExpressValidator } = require('express-validator');
 const adminDbHelpers = require('../../dbHelpers/adminDbHelpers')
-const userDbHelpers=require('../../dbHelpers/userDbHelpers')
+const userDbHelpers = require('../../dbHelpers/userDbHelpers')
 
 exports.adminSignin = (req, res) => {
   res.render(
@@ -40,14 +40,14 @@ exports.adminHome = async (req, res) => {
     const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser`);
     res.render('adminViews/adminHome', { users: users.data, orders, dashDetails: dashDetails, topProducts, topBrands, topCategories });
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
 //product manage
 exports.adminProductManage = async (req, res) => {
   try {
-    const page = req.query.page || 1; 
+    const page = req.query.page || 1;
     const productsResponse = await axios.get(`http://localhost:${process.env.PORT}/api/getProduct/1?page=${page}`);
     const products = productsResponse.data.products;
     const totalPages = productsResponse.data.totalPages;
@@ -55,7 +55,7 @@ exports.adminProductManage = async (req, res) => {
     const searchQuery = req.query.Search;
     let result
     if (searchQuery) {
-         result = await adminDbHelpers.productSearchResult(searchQuery)
+      result = await adminDbHelpers.productSearchResult(searchQuery)
     }
     res.status(200).render("adminViews/adminProductManage", {
       products: result || products,
@@ -63,8 +63,7 @@ exports.adminProductManage = async (req, res) => {
       currentPage: page
     });
   } catch (err) {
-    console.error("Error rendering admin product management page:", err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 };
 
@@ -101,8 +100,7 @@ exports.adminAddProduct = async (req, res) => {
     )
 
   } catch (err) {
-    console.log("err", err);
-    res.send("Internal server err hh");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -145,8 +143,7 @@ exports.adminUpdateProduct = async (req, res) => {
       }
     );
   } catch (err) {
-    console.log("err", err);
-    res.send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 
 }
@@ -157,8 +154,7 @@ exports.adminUnlistedProduct = async (req, res) => {
 
     res.status(200).render('adminViews/adminUnlistedProduct', { products: product.data })
   } catch (error) {
-    console.error('Error fetching product details:', error);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -169,19 +165,22 @@ exports.adminCategoryManage = async (req, res) => {
       `http://localhost:${process.env.PORT}/api/getCategory/1`);
     res.render("adminViews/adminCategoryManage", { category: category.data });
   } catch (err) {
-    res.send("Internal server err");
-
+    res.status(500).render('errorPages/500page')
   }
 }
 
 exports.adminAddCategory = (req, res) => {
-  res.status(200).render('adminViews/adminAddCategory', { err: req.session.errMesg }, (err, html) => {
-    if (err) {
-      res.status(500).send("Internal server error")
-    }
-    delete req.session.errMesg;
-    res.send(html);
-  })
+  try {
+    res.status(200).render('adminViews/adminAddCategory', { err: req.session.errMesg }, (err, html) => {
+      if (err) {
+        res.status(500).send("Internal server error")
+      }
+      delete req.session.errMesg;
+      res.send(html);
+    })
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
+  }
 }
 
 exports.adminUpdateCategory = async (req, res) => {
@@ -190,25 +189,27 @@ exports.adminUpdateCategory = async (req, res) => {
     res.status(200).render('adminViews/adminUpdateCategory',
       { category: category.data, errMesg: req.session.category })
   } catch (err) {
-    res.send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 }
 
 exports.adminUnlistedCategory = async (req, res) => {
   try {
-
-    console.log(req.params.value);
     const category = await axios.post(`http://localhost:${process.env.PORT}/api/getCategory/0`)
     res.status(200).render('adminViews/adminUnlistedCategory', { category: category.data })
   } catch (err) {
-    res.send("Internal server error");
+    res.status(500).render('errorPages/500page')
   }
 }
 
 //User maanage
 exports.adminUserManage = async (req, res) => {
-  const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser`);
-  res.status(200).render('adminViews/adminUserManage', { users: users.data });
+  try {
+    const users = await axios.post(`http://localhost:${process.env.PORT}/api/getAllUser`);
+    res.status(200).render('adminViews/adminUserManage', { users: users.data });
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
+  }
 }
 
 //Order Manage
@@ -218,18 +219,16 @@ exports.adminOrderManage = async (req, res) => {
     res.status(200).render('adminViews/adminOrderManage', { orders })
   }
   catch (err) {
-    console.log("err", err);
-    res.send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 }
 
-exports.orderManage=async(req,res)=>{
-  try{
-    const orderDetail = await userDbHelpers.getOrderDetails(req.query.orderId,req.query.productId)
-    console.log(orderDetail);
+exports.orderManage = async (req, res) => {
+  try {
+    const orderDetail = await userDbHelpers.getOrderDetails(req.query.orderId, req.query.productId)
     res.status(200).render('adminViews/adminOrderDetail', { orderDetail })
-  }catch(err){
-    res.send("Internal server err");
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -239,8 +238,7 @@ exports.adminCouponManage = async (req, res) => {
     const coupons = await adminDbHelpers.getAllCoupon();
     res.render('adminViews/adminCouponManage', { coupons })
   } catch (err) {
-    console.log("err", err);
-    res.send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -266,7 +264,6 @@ exports.adminAddCoupon = async (req, res) => {
       res.status(200).send(html);
     })
   } catch (err) {
-    console.log("err", err);
-    res.send("Internal server err");
+    res.status(500).render('errorPages/500page')
   }
 }

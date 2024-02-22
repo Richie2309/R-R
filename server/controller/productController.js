@@ -29,8 +29,6 @@ function capitalizeFirstLetter(str) {
 
 //     res.send(result);
 //   } catch (err) {
-//     console.log("Error:", err);
-//     res.status(500).render("internal server error");
 //   }
 // }
 
@@ -40,7 +38,7 @@ exports.userProductDetail = async (req, res) => {
     const result = await Productdb.find({ _id: productId })
     res.send(result)
   } catch (err) {
-    console.log(err);
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -111,9 +109,8 @@ exports.adminAddProducts = async (req, res) => {
     })
     const data = await newProduct.save();
     res.redirect("/adminHome");
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal server error");
+  } catch (err) {
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -134,8 +131,7 @@ exports.showProduct = async (req, res) => {
     }
 
   } catch (err) {
-    console.error('Error fetching products:', err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -148,8 +144,7 @@ exports.singleProduct = async (req, res) => {
     // const products = await Productdb.find({ listed: (Number(req.params.value)) ? true : false })
     // res.send(products);
   } catch (err) {
-    console.error('Error fetching products:', err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -161,8 +156,7 @@ exports.adminUnlistedProduct = async (req, res) => {
     )
     res.status(200).redirect("/adminProductManage")
   } catch (err) {
-    console.error('Error deleting products:', err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -174,8 +168,7 @@ exports.adminRestoreProduct = async (req, res) => {
     )
     res.status(200).redirect("/adminUnlistedProduct")
   } catch (err) {
-    console.error('Error deleting products:', err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -237,8 +230,7 @@ exports.adminUpdateProduct = async (req, res) => {
     }
 
   } catch (err) {
-    console.error('Error updating products:', err);
-    res.status(500).send('Internal server error');
+    res.status(500).render('errorPages/500page')
   }
 }
 
@@ -262,7 +254,6 @@ exports.deleteProductImage = async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Image deleted successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).render('errorPages/500page')
   }
 };

@@ -19,7 +19,7 @@ exports.search = async (search) => {
     });
     return searchResults
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -89,7 +89,7 @@ exports.getProductByCategory = async (category, page, search=null) => {
     const result = await Productdb.aggregate(agg);
     return { result, totalPages };
   } catch (err) {
-    console.log("Error:", err);
+    throw err;
   }
 }
 
@@ -132,7 +132,7 @@ exports.getCartItems = async (userId) => {
     ];
     return await Cartdb.aggregate(agg)
   } catch (err) {
-    return err;
+    throw err;
   }
 }
 
@@ -156,7 +156,7 @@ exports.getDefaultAddress = async (userId, addressId) => {
     ];
     return await userAddressdb.aggregate(agg);
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -182,7 +182,7 @@ exports.getOrders = async (userId) => {
     ];
     return await Orderdb.aggregate(agg);
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -252,8 +252,8 @@ exports.userCancelOrder = async (orderId, productId, userId) => {
     }
     return;
   } catch (err) {
-    console.error('Error cancelling order:', err);
-    res.status(500).send('Internal server error');
+    throw err
+    
   }
 }
 
@@ -304,8 +304,7 @@ exports.userReturnOrder = async (orderId, productId, userId) => {
     )
     return;
   } catch (err) {
-    console.error('Error returning order:', err);
-    res.status(500).send('Internal server error');
+    throw err;
   }
 }
 
@@ -366,6 +365,6 @@ exports.getWallet = async (userId) => {
   try {
     return await walletDb.findOne({ userId: userId }).exec();
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }

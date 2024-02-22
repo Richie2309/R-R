@@ -45,8 +45,7 @@ exports.adminAddCoupon = async (req, res) => {
         await newCoupon.save();
         res.status(200).redirect('/adminCouponManage');
     } catch (err) {
-        console.log('coupon controller err in add coupon', err);
-        res.status(500).send('Internal server error');
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -57,7 +56,7 @@ exports.adminDeleteCoupon = async (req, res) => {
         await adminDbHelpers.adminDeleteCoupon(couponId);
         res.status(200).send('deleted');
     } catch (err) {
-        console.log('coupon controller err in delete coupon', err);
+        res.status(500).render('errorPages/500page')
     }
 }
 
@@ -96,7 +95,6 @@ exports.userApplyCoupon = async (req, res) => {
         }
         // res.redirect(`/userCheckout`);
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal server error');
+        res.status(500).render('errorPages/500page')
     }
 }
