@@ -74,7 +74,7 @@
                 <div class="col-md-2">
                     <label for="validatePrice" class="form-label">Price</label>
                     <input type="number" class="form-control" name="price" value="<%= product[0].price%>"
-                        id="validatePrice">
+                        id="validatePrice" min="1">
                     <p class="text-danger">
                         <%=errMesg?.price %>
                     </p>
@@ -83,7 +83,7 @@
                 <div class="col-md-2">
                     <label for="validateOffer" class="form-label">Units</label>
                     <input type="number" class="form-control" name="units" value="<%= product[0].units %>"
-                        id="validateOffer">
+                        id="validateOffer" min="1">
                     <p class="text-danger">
                         <%=errMesg?.units %>
                     </p>

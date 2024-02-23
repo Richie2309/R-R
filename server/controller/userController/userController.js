@@ -523,13 +523,6 @@ exports.userCheckout = async (req, res) => {
 
     const orderRandomId = `ORDER${uuidv4().slice(0, 18)}`;
 
-    orderItems.forEach(async (element) => {
-      await Productdb.updateOne(
-        { _id: element.productId },
-        { $inc: { units: -element.units } },
-      );
-    });
-
     const newOrder = new Orderdb({
       userId: req.session.isUserAuth,
       orderItems: orderItems,
@@ -553,6 +546,12 @@ exports.userCheckout = async (req, res) => {
         { userId: req.session.isUserAuth },
         { $set: { products: [] } }
       );
+      orderItems.forEach(async (element) => {
+        await Productdb.updateOne(
+          { _id: element.productId },
+          { $inc: { units: -element.units } },
+        );
+      });
       req.session.orderSucessPage = true;
       return res.json({
         status: 'success',
@@ -560,6 +559,7 @@ exports.userCheckout = async (req, res) => {
         url: '/orderSuccess'
       })
     }
+
     //if wallet payment
     if (req.body.paymentMethod === "wallet") {
       if (walletInfo && walletInfo.balance >= total) {
@@ -568,6 +568,12 @@ exports.userCheckout = async (req, res) => {
           { userId: req.session.isUserAuth },
           { $set: { products: [] } }
         ); // empty cart items
+        orderItems.forEach(async (element) => {
+          await Productdb.updateOne(
+            { _id: element.productId },
+            { $inc: { units: -element.units } },
+          );
+        });
         await walletDb.updateOne(
           { userId: req.session.isUserAuth },
           {
@@ -628,7 +634,12 @@ exports.onlinePaymentSuccessfull = async (req, res) => {
         { userId: req.session.isUserAuth },
         { $set: { products: [] } }
       );
-
+      orderItems.forEach(async (element) => {
+        await Productdb.updateOne(
+          { _id: element.productId },
+          { $inc: { units: -element.units } },
+        );
+      });
       req.session.orderSucessPage = true;
       return res.status(200).redirect("/orderSuccess");
     } else {

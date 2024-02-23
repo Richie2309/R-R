@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=Barlow&family=EB+Garamond&family=Familjen+Grotesk:wght@400;600;700&family=PT+Sans&family=Rokkitt&family=Staatliches&display=swap');
+
 /* Color of the links BEFORE scroll */
 body {
     background-color: #ffffff;
     overflow-x: hidden;
 
 }
+
 .navbar-scroll .nav-link,
 .navbar-scroll .navbar-toggler-icon,
 .navbar-scroll .navbar-brand {
@@ -42,7 +44,7 @@ body {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-} 
+}
 
 
 
@@ -148,12 +150,14 @@ body {
     .navbar-brand {
         font-size: 36px;
     }
-    .forhim{
+
+    .forhim {
         font-size: 100px;
         margin-top: 60px;
         letter-spacing: 20px;
     }
-    .img{
+
+    .img {
         margin-top: 40px;
     }
 }
@@ -164,10 +168,12 @@ body {
         margin-top: 40px;
         letter-spacing: 12px;
     }
-    .forhim{
+
+    .forhim {
         font-size: 50px;
     }
-    .img{
+
+    .img {
         margin-top: 30px;
     }
 }
@@ -176,56 +182,96 @@ body {
     .navbar-brand {
         font-size: 18px;
     }
-    .forhim{
-        font-size: 15px;    
+
+    .forhim {
+        font-size: 15px;
         margin-top: 20px;
         letter-spacing: 4px;
     }
-    .img{
+
+    .img {
         margin-top: 20px;
     }
 }
 
 
 
-
-
-/*  */
-/*  */
-
-
 .button-link {
+    border: #000000;
+    border-style: outset;
     display: inline-block;
     padding: 30px 30px;
     text-align: center;
     text-decoration: none;
     font-weight: bold;
-    color: #ffffff;
-    background-color: #ffea00;
+    color: #000000;
+    background-color: #000000;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: color 0.3s, background-position 0.3s;
+    /* Added background-position transition for animation */
+    background-image: linear-gradient(to right, #000000 0%, #000000 50%, #ffffff 50%, #ffffff 100%);
+    background-size: 200% 100%;
+    /* Double the width for full coverage */
+    background-position: right bottom;
+    /* Start the background position from the right */
 }
 
-.edit-profile:hover,
 .button-link:hover {
-    /* border: solid black 0.5px; */
-    background-color: #f4f6be;
-    color: #000000;
+    border: solid black 1px;
+    color: #ffffff;
+    background-position: left bottom;
 }
 
 .edit-profile {
+    border:solid yellow 1px;
     display: inline-block;
     text-align: center;
     padding: 10px 10px;
-
     text-decoration: none;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff;
-    background-color: #6fff00;
+    color: #000000;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: color 0.3s, background-position 0.3s;
+    /* Added background-position transition for animation */
+    background-image: linear-gradient(to right, yellow 0%, yellow 50%, #ffffff 50%, #ffffff 100%);
+    background-size: 200% 100%;
+    /* Double the width for full coverage */
+    background-position: right bottom;
+    /* Start the background position from the right */
 }
+
+.edit-profile:hover {
+    border: hidden;
+    color: #ffffff;
+    background-position: left bottom;
+}
+
+.log-out {
+    border:solid rgb(255, 0, 0) 1px;
+    display: inline-block;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    border-radius: 5px;
+    transition: color 0.3s, background-position 0.3s;
+    /* Added background-position transition for animation */
+    background-image: linear-gradient(to right, #ff0000 0%, #ff0000 50%, #ffffff 50%, #ffffff 100%);
+    background-size: 200% 100%;
+    /* Double the width for full coverage */
+    background-position: right bottom;
+    /* Start the background position from the right */
+}
+
+.log-out:hover {
+    border: hidden;
+    color: #ffffff;
+    background-position: left bottom;
+}
+
 
 /* Cart icon number */
 .contain {
@@ -238,10 +284,14 @@ body {
     padding: 5px;
     border-radius: 50%;
     position: absolute;
-    top: -15px; /* Adjust the top value for positioning */
-    right: -15px; /* Adjust the right value for positioning */
-    width: 20px; /* Set a fixed width for a perfect circle */
-    height: 20px; /* Set a fixed height for a perfect circle */
+    top: -15px;
+    /* Adjust the top value for positioning */
+    right: -15px;
+    /* Adjust the right value for positioning */
+    width: 20px;
+    /* Set a fixed width for a perfect circle */
+    height: 20px;
+    /* Set a fixed height for a perfect circle */
     display: flex;
     align-items: center;
     justify-content: center;

@@ -65,7 +65,7 @@ exports.userAddAddress = async (req, res) => {
       req.session.fName = `Your name is required`;
     }
 
-    if (!req.body.pincode || !/^\d{6}$/.test(pincode)) {
+    if (!req.body.pincode) {
       req.session.pincode = `Enter 6 digits pincode`;
     }
 
