@@ -622,6 +622,7 @@ exports.userCheckout = async (req, res) => {
 
 exports.onlinePaymentSuccessfull = async (req, res) => {
   try {
+    console.log('was here');
     const hmac = crypto.createHmac("sha256", 'IVbX06LxB8oMcuyvF6RZFhxt');
     hmac.update(
       req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id
@@ -634,18 +635,13 @@ exports.onlinePaymentSuccessfull = async (req, res) => {
         { userId: req.session.isUserAuth },
         { $set: { products: [] } }
       );
-      orderItems.forEach(async (element) => {
-        await Productdb.updateOne(
-          { _id: element.productId },
-          { $inc: { units: -element.units } },
-        );
-      });
       req.session.orderSucessPage = true;
       return res.status(200).redirect("/orderSuccess");
     } else {
       return res.send("Order Failed");
     }
   } catch (err) {
+    console.log(err,'hello its from backend')
     res.status(500).render('errorPages/500page')
   }
 }

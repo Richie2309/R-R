@@ -21,6 +21,36 @@
     <link rel="stylesheet" href="/css/users/userCart.css">
     <!-- favicon image -->
     <link rel="icon" type="image/png" href="/img/pngegg.png">
+    <style>
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto; /* 10% from the top and centered horizontally */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%; /* Adjust as needed */
+  text-align: center; /* Center the content horizontally */
+  display: flex; /* Use flexbox for vertical centering */
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center the content vertically */
+}
+
+/* Close Button */
+.close {
+  color: red; /* Red color for close button */
+  align-self: flex-end; /* Align the close button to the end of the flex container */
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: darkred; /* Dark red color when hovering */
+  text-decoration: none;
+}
+
+    </style>
 </head>
 
 <body>
@@ -77,13 +107,13 @@
                                                     <%= cartProducts.length %>
                                                 </p>
                                             </span>
-                                        <% } %>
+                                            <% } %>
                                     </div>
                                 </a>
-                                
-                                
-                                
-                                
+
+
+
+
                             </div>
                         </li>
                         <li class="nav-item p-1">
@@ -99,6 +129,16 @@
         </div>
     </nav>
     <!-- Navbar -->
+
+
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>No more units available for this product.</p>
+        </div>
+    </div>
+
+
     <section class="h-100 h-custom font-family-Bai-Jamjuree">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -229,11 +269,26 @@
                 inputElement.stepDown();
                 handleInputChange(inputElement.value, productId);
             }
-
             function incrementQuantity(index, productId) {
                 var inputElement = document.getElementById('form' + index);
-                inputElement.stepUp();
-                handleInputChange(inputElement.value, productId);
+                var maxUnits = parseInt(inputElement.max); // Get the maximum units allowed
+                var currentValue = parseInt(inputElement.value); // Get the current value
+
+                // Check if the current value is less than the maximum units allowed
+                if (currentValue < maxUnits) {
+                    inputElement.stepUp();
+                    handleInputChange(inputElement.value, productId);
+                } else {
+                    // Display the pop-up modal
+                    var modal = document.getElementById('popupModal');
+                    modal.style.display = "block";
+
+                    // Close the modal when the user clicks on the close button
+                    var closeBtn = document.getElementsByClassName("close")[0];
+                    closeBtn.onclick = function () {
+                        modal.style.display = "none";
+                    }
+                }
             }
 
             function handleInputChange(newValue, productId) {
@@ -295,13 +350,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-

@@ -6,6 +6,7 @@ document.getElementById('proceedToBuyBtn').addEventListener('click', function(ev
     type: "POST"
   })
   .then(res => {
+    console.log(res,'res from front end');
       if(res.err){
           return location.href = res.url;
       }
@@ -45,7 +46,7 @@ document.getElementById('proceedToBuyBtn').addEventListener('click', function(ev
     }
   })
   .catch(err => {
-      console.log(err)
+      console.log(err,'err form front end --------------->')
   })
 
 });
