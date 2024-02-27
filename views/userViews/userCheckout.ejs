@@ -157,9 +157,9 @@
                             </div>
 
                             <div class="d-flex justify-content-between">
-
                                 <h6 id="couponValueDisplay"></h6>
                                 <h6 class="text-success" id="discountedPrice"></h6>
+                                <button id="removeCouponBtn" onclick="removeCoupon()" style="display: none;" class="btn btn-danger mt-1">Remove</button>
 
                             </div>
                         </div>
@@ -332,10 +332,18 @@
                 document.getElementById('totalPrice').innerText = `₹ ${couponValue}`
                 document.getElementById('discountedPrice').innerText = `-₹ ${discount}`
                 document.getElementById('couponValueDisplay').innerHTML = `<p style="color: #45a049;" >Coupon  is applied!</p>`;
+                document.getElementById('removeCouponBtn').style.display = 'block';
+
             }
             function displayError(errorMessage) {
         const errorDisplayElement = document.getElementById('couponValueDisplay');
         errorDisplayElement.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
+        document.getElementById('removeCouponBtn').style.display = 'none';
+    }
+    function removeCoupon() {
+        // Your code to remove the coupon here
+        // For demonstration purposes, let's just reload the page
+        location.reload();
     }
 
         </script>

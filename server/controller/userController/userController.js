@@ -594,7 +594,7 @@ exports.userCheckout = async (req, res) => {
         });
       } else {
         req.session.walletErrorMessage = 'Insufficient balance in wallet';
-        return res.redirect('/userCheckout'); // Redirect to checkout page to display the error message
+        return res.redirect('/userCheckout');
       }
     }
     //if online payment
