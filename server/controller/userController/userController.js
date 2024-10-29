@@ -622,7 +622,6 @@ exports.userCheckout = async (req, res) => {
 
 exports.onlinePaymentSuccessfull = async (req, res) => {
   try {
-    console.log('was here');
     const hmac = crypto.createHmac("sha256", 'IVbX06LxB8oMcuyvF6RZFhxt');
     hmac.update(
       req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id

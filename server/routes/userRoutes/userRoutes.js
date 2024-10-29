@@ -117,6 +117,8 @@ route.get('/api/getUserInfo', userController.userInfo)
 
 route.get('/api/getAddress', addressController.addressInfo)
 
+route.get('/api/getAvailableCoupons', userAuthMiddleware.isUserAuth2, couponController.getAvailableCoupons);
+
 route.post('/api/getCartItems', cartController.getCartItems)
 
 module.exports = route; 

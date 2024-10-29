@@ -4,7 +4,8 @@ const userAddressdb = require('../model/userModel/addressModel')
 const Cartdb = require('../model/userModel/cartModel')
 const Orderdb = require('../model/userModel/orderModel');
 const Productdb = require('../model/adminModel/productModel');
-const walletDb = require('../model/userModel/walletModel')
+const walletDb = require('../model/userModel/walletModel');
+const couponDb = require('../model/userModel/couponModel');
 
 //Search for product
 exports.search = async (search) => {
@@ -23,7 +24,7 @@ exports.search = async (search) => {
   }
 }
 
-exports.getProductByCategory = async (category, page, search=null) => {
+exports.getProductByCategory = async (category, page, search = null) => {
   try {
     const limit = 2;
     const skip = (page - 1) * limit;
@@ -43,16 +44,16 @@ exports.getProductByCategory = async (category, page, search=null) => {
         $limit: limit
       },
     ];
-     // if there is both min and max for product price
-     if(Number(search?.minPrice) && Number(search?.maxPrice)) {
-      agg.splice(1,0, {
+    // if there is both min and max for product price
+    if (Number(search?.minPrice) && Number(search?.maxPrice)) {
+      agg.splice(1, 0, {
         $match: {
           $and: [
             {
-              price: {$gte: Number(search?.minPrice)}
+              price: { $gte: Number(search?.minPrice) }
             },
             {
-              price:{$lte: Number(search?.maxPrice)}
+              price: { $lte: Number(search?.maxPrice) }
             }
           ]
         },
@@ -60,26 +61,26 @@ exports.getProductByCategory = async (category, page, search=null) => {
     }
 
     //if there is only max for filter
-    if(!Number(search?.minPrice) && Number(search?.maxPrice)) {
-      agg.splice(1,0, {
+    if (!Number(search?.minPrice) && Number(search?.maxPrice)) {
+      agg.splice(1, 0, {
         $match: {
-          price: {$lt: Number(search?.maxPrice)}
+          price: { $lt: Number(search?.maxPrice) }
         },
       });
     }
 
     //if there is only min for filter
-    if(Number(search?.minPrice) && !Number(search?.maxPrice)) {
-      agg.splice(1,0, {
+    if (Number(search?.minPrice) && !Number(search?.maxPrice)) {
+      agg.splice(1, 0, {
         $match: {
-          price: {$gt: Number(search?.minPrice)}
+          price: { $gt: Number(search?.minPrice) }
         },
       });
     }
 
     //Price Sort
-    if(Number(search?.sort)){
-      agg.splice(1,0, {
+    if (Number(search?.sort)) {
+      agg.splice(1, 0, {
         $sort: {
           price: Number(search?.sort)
         },
@@ -159,6 +160,16 @@ exports.getDefaultAddress = async (userId, addressId) => {
     throw err;
   }
 }
+
+exports.getAvailableCoupons = async () => {
+  try {
+    const currentDate = new Date();
+    const coupons = await couponDb.find({ expiry: { $gte: currentDate } })
+    return coupons;
+  } catch (err) {
+    return [];
+  }
+};
 
 //To get all orders
 exports.getOrders = async (userId) => {
@@ -253,7 +264,7 @@ exports.userCancelOrder = async (orderId, productId, userId) => {
     return;
   } catch (err) {
     throw err
-    
+
   }
 }
 

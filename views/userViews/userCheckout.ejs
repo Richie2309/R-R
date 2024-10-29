@@ -147,8 +147,8 @@
                         <div class="text-success w-100">
                             <h5 class="text-uppercase mb-3 text-success">Give code</h5>
                             <div class="input-group">
-                                <input type="text" class="form-control border-success" name="couponCode"
-                                    id="couponCode" placeholder="Promo code">
+                                <input type="text" class="form-control border-success" name="couponCode" id="couponCode"
+                                    placeholder="Promo code">
                                 <div class="input-group-append">
 
                                     <button onclick="applyCoupon()" type="submit"
@@ -159,7 +159,8 @@
                             <div class="d-flex justify-content-between">
                                 <h6 id="couponValueDisplay"></h6>
                                 <h6 class="text-success" id="discountedPrice"></h6>
-                                <button id="removeCouponBtn" onclick="removeCoupon()" style="display: none;" class="btn btn-danger mt-1">Remove</button>
+                                <button id="removeCouponBtn" onclick="removeCoupon()" style="display: none;"
+                                    class="btn btn-danger mt-1">Remove</button>
 
                             </div>
                         </div>
@@ -172,6 +173,24 @@
                                 }, 0) %>.00</strong>
                     </li>
                 </ul>
+                <!-- Show available coupons -->
+                <div class="mt-4">
+                    <h6 class="text-uppercase mb-3">Available Coupons</h6>
+                    <select class="form-select form-control" id="availableCoupons">
+                        <option value="">Available Coupon Codes</option>
+                        <% if (Array.isArray(coupons) && coupons.length > 0) { %>
+                            <% coupons.forEach(function(coupon) { %>
+                                <option value="<%= coupon.code %>">
+                                    <%= coupon.code %> - <%= coupon.discount %>% OFF
+                                    <% if (coupon.minPurchase) { %>
+                                        (Min Purchase: ₹<%= coupon.minPurchase %>)
+                                    <% } %>
+                                </option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <small class="text-muted d-block mt-2">*Copy the code and paste above to apply discount</small>
+                </div>
                 <a href="#">
 
                 </a><br><br>
@@ -254,42 +273,52 @@
                                     Wallet, Balance: <b>₹ <%= walletInfo?.balance || 0 %></b>
                                 </label>
                                 <% if (walletErrorMessage) { %>
-                                    <p class="text-danger"><%= walletErrorMessage %></p>
-                                <% }else{ %>
-                                    <p class="text-success"><%= walletSuccessMessage %></p>
-                                <% } %>
-                                <br>
-                                <% } else { %>
-                                    <label style="font-weight: bold;">
-                                        <input type="radio" name="paymentMethod" value="online"
-                                            onchange="proceedToBuy()">
-                                        Online Payment
-                                    </label><br>
-                                    <label style="font-weight: bold;">
-                                        <input type="radio" name="paymentMethod" value="cod" onchange="proceedToBuy()">
-                                        Cash on Delivery
-                                    </label><br>
-                                    <label style="font-weight: bold;">
-                                        <input type="radio" name="paymentMethod" value="wallet" onchange="proceedToBuy()">
-                                        Wallet, Balance: <b>₹ <%= walletInfo?.balance || 0 %></b>
-                                    </label>
-                                    <% if (walletErrorMessage) { %>
-                                        <p class="text-danger"><%= walletErrorMessage %></p>
+                                    <p class="text-danger">
+                                        <%= walletErrorMessage %>
+                                    </p>
                                     <% }else{ %>
-                                        <p class="text-success"><%= walletSuccessMessage %></p>
-                                    <% } %>
-                                    <br>
-                                    <% } %>
-                                        <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
+                                        <p class="text-success">
+                                            <%= walletSuccessMessage %>
+                                        </p>
+                                        <% } %>
+                                            <br>
+                                            <% } else { %>
+                                                <label style="font-weight: bold;">
+                                                    <input type="radio" name="paymentMethod" value="online"
+                                                        onchange="proceedToBuy()">
+                                                    Online Payment
+                                                </label><br>
+                                                <label style="font-weight: bold;">
+                                                    <input type="radio" name="paymentMethod" value="cod"
+                                                        onchange="proceedToBuy()">
+                                                    Cash on Delivery
+                                                </label><br>
+                                                <label style="font-weight: bold;">
+                                                    <input type="radio" name="paymentMethod" value="wallet"
+                                                        onchange="proceedToBuy()">
+                                                    Wallet, Balance: <b>₹ <%= walletInfo?.balance || 0 %></b>
+                                                </label>
+                                                <% if (walletErrorMessage) { %>
+                                                    <p class="text-danger">
+                                                        <%= walletErrorMessage %>
+                                                    </p>
+                                                    <% }else{ %>
+                                                        <p class="text-success">
+                                                            <%= walletSuccessMessage %>
+                                                        </p>
+                                                        <% } %>
+                                                            <br>
+                                                            <% } %>
+                                                                <input type="hidden" name="totalAmount" value="<%= cartProducts.reduce((total, item)=> {
                                 return total + (item.pDetail[0].price *
                                 item.products.units);
                                 }, 0) %>">
-                                        <input type="hidden" name="defaultAddress"
-                                            value="<%= userInfo.defaultAddress  %>">
-                                        <button type="submit" id="proceedToBuyBtn"
-                                            class="btn btn-success text-light btn-block btn-lg"
-                                            style="display: none;">Proceed to
-                                            Buy</button>
+                                                                <input type="hidden" name="defaultAddress"
+                                                                    value="<%= userInfo.defaultAddress  %>">
+                                                                <button type="submit" id="proceedToBuyBtn"
+                                                                    class="btn btn-success text-light btn-block btn-lg"
+                                                                    style="display: none;">Proceed to
+                                                                    Buy</button>
                         </form>
                     </div>
                 </div>
@@ -298,17 +327,24 @@
     </div><br><br>
     <%-include('include/footer')-%>
         <script>
+            document.getElementById('availableCoupons').addEventListener('change', function () {
+                const selectedCode = this.value;
+                if (selectedCode) {
+                    document.getElementById('couponCode').value = selectedCode;
+                }
+            });
+        </script>
+        <script>
             function applyCoupon() {
                 // Get the input element by its ID
                 var couponCodeInput = document.getElementById("couponCode");
-
                 // Get the value entered by the user
                 var couponCodeValue = couponCodeInput.value;
 
                 fetch(`/userApplyCoupon?couponCode=${couponCodeValue}`, {
                     method: "GET",
                     headers: {
-                        "Content-Type": "application/json", 
+                        "Content-Type": "application/json",
                     },
                 })
                     .then((response) => {
@@ -336,15 +372,15 @@
 
             }
             function displayError(errorMessage) {
-        const errorDisplayElement = document.getElementById('couponValueDisplay');
-        errorDisplayElement.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
-        document.getElementById('removeCouponBtn').style.display = 'none';
-    }
-    function removeCoupon() {
-        // Your code to remove the coupon here
-        // For demonstration purposes, let's just reload the page
-        location.reload();
-    }
+                const errorDisplayElement = document.getElementById('couponValueDisplay');
+                errorDisplayElement.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
+                document.getElementById('removeCouponBtn').style.display = 'none';
+            }
+            function removeCoupon() {
+                // Your code to remove the coupon here
+                // For demonstration purposes, let's just reload the page
+                location.reload();
+            }
 
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
@@ -357,14 +393,14 @@
             async function setAsDefault(addressId) {
                 try {
                     const response = await fetch(`/changeAddress?id=${addressId}`, {
-                        method: 'GET', 
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
 
                     if (response.ok) {
-                        location.reload(); 
+                        location.reload();
                     } else {
                         console.error('Failed to set default address');
                     }
@@ -387,5 +423,5 @@
             }
         </script>
 </body>
-</html>
 
+</html>

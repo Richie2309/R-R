@@ -60,6 +60,16 @@ exports.adminDeleteCoupon = async (req, res) => {
     }
 }
 
+// Get available coupons
+exports.getAvailableCoupons = async (req, res) => {
+    try {
+        const coupons = await userDbHelpers.getAvailableCoupons();
+        res.status(200).json({ coupons });
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 //User apply coupon
 exports.userApplyCoupon = async (req, res) => {
     try {

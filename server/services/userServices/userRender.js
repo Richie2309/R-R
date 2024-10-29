@@ -315,6 +315,7 @@ exports.userCheckout = async (req, res) => {
         const user = await axios.get(`http://localhost:${process.env.PORT}/api/getAddress?userId=${userId}`);
         const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
         const cartProducts = await userDbHelper.getCartItems(req.session.isUserAuth);
+        const coupons = await userDbHelper.getAvailableCoupons()
 
         const total = cartProducts.reduce((total, value) => {
             return total += Math.round((value.pDetail[0].price * value.products.units));
@@ -337,7 +338,8 @@ exports.userCheckout = async (req, res) => {
                 total,
                 walletInfo,
                 walletErrorMessage,
-                walletSuccessMessage
+                walletSuccessMessage,
+                coupons: coupons || []
             }, (err, html) => {
                 if (err) {
                     console.log(err);
@@ -349,7 +351,7 @@ exports.userCheckout = async (req, res) => {
             });
         } else {
             // Handle the case when cartProducts is empty or doesn't have the expected structure
-            res.status(200).render('userViews/userCheckout', { cartProducts: [] });
+            res.status(200).render('userViews/userCheckout', { cartProducts: [], coupons: [] });
         }
     } catch (error) {
         res.status(500).render('errorPages/500page')
@@ -408,6 +410,6 @@ exports.userWallet = async (req, res) => {
         const walletInfo = await userDbHelper.getWallet(req.session.isUserAuth)
         res.render('userViews/userWallet', { walletInfo, cartProducts });
     } catch (err) {
-      res.status(500).render('errorPages/500page')
+        res.status(500).render('errorPages/500page')
     }
 }
